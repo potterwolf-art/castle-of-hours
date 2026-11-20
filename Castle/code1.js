@@ -811,6 +811,8 @@ if(typeof window!=='undefined' && typeof document!=='undefined' && !window.__cas
     const finishTitle=q('#ad-success-title');
     finishTitle.tabIndex=-1;
     window.CastleMini?.add(q('.ad-timer'),{
+      room:name,
+      collapse:name==='Забытая библиотека'?()=>core.requestScene(ui,'Комната котика'):null,
       read:()=>owns(core.read().session)?core.miniRead('study'):null,
       change:(key,paused)=>owns(core.read().session) && core.miniChange('study',key,paused),
       refresh:()=>ui.update()

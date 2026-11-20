@@ -381,7 +381,7 @@ if (!window.CastleClockSignals) {
 window.CastleClockSignals.frame();
 };
 gdjs._1063_1072_1089_1086_1074_1072_1103_32_1084_1072_1089_1090_1077_1088_1089_1082_1072_1103Code.userFunc0x8f3998 = function GDJSInlineCode(runtimeScene) {
-// Loaded once by the timer scenes. Ordinary browser exports retain their original interface.
+// The desktop and browser views display the same saved interval.
 if (!window.CastleMini) {
   let ipc, adapter, launch, clock, opening=false, away=false, shown=false, lastMessage='';
   const skin=window.__castleVisuals;
@@ -430,6 +430,98 @@ if (!window.CastleMini) {
       e.textContent=localStorage.getItem('theCozyTime.language')==='en'?'Could not open the mini-timer':'Не удалось открыть мини-таймер';
       launch.after(e);setTimeout(()=>e.remove(),4200);
     });
+  }
+  // Browser presentation of the same panel and Adventure session as the desktop mini-window.
+  let web = null;
+  function closeWeb() {
+    if (!web) return;
+    clearInterval(web.repaint);
+    web.frame.remove();
+    web = null;
+    adapter = null;
+    launch = null;
+  }
+  function explorer() {
+    return [window.__castleCatHome, window.__castleCorridor].find(ui =>
+      ui && window.__castleAdventureCore.canNavigate(ui));
+  }
+  function positionPanel(frame, ui) {
+    const root = ui.root;
+    const back = root.querySelector('.castle-back').getBoundingClientRect();
+    const width = frame.offsetWidth, height = frame.offsetHeight;
+    const right = Math.max(6, innerWidth - width - 6), bottom = Math.max(6, innerHeight - height - 6);
+    const below = Math.min(bottom, back.bottom + 6);
+    const spots = [[6, 6], [6, below], [right, below], [6, bottom], [right, bottom], [right, 6]];
+    const controls = Array.from(root.querySelectorAll('button:not([hidden]),.castle-resume,.ad-header'))
+      .map(el => el.getBoundingClientRect()).filter(r => r.width && r.height);
+    const overlap = ([x,y]) => controls.reduce((area,r) => area +
+      Math.max(0, Math.min(x+width,r.right)-Math.max(x,r.left)) *
+      Math.max(0, Math.min(y+height,r.bottom)-Math.max(y,r.top)), 0);
+    const [x,y] = spots.reduce((best,spot) => overlap(spot)<overlap(best)?spot:best);
+    frame.style.left=x+'px'; frame.style.top=y+'px';
+  }
+  function updateWeb() {
+    const w=web;
+    if (!w) return;
+    const value=snapshot();
+    if (!value || value.key!==w.key) {closeWeb();return;}
+    if (!w.render) return;
+    const study=window.__castleStudy;
+    if (study?.root.isConnected && study.scene!==w.origin && study.scene.getName()===w.room) {
+      closeWeb();return;
+    }
+    const ui=explorer();
+    const modal=document.querySelector('dialog[open],.cozy-open,.castle-modal-shade:not([hidden]),.home-rest-panel:not([hidden])');
+    w.frame.hidden=w.dismissed || !ui || !!modal;
+    if (!w.frame.hidden) {positionPanel(w.frame,ui);w.render(value);}
+    if (w.dismissed && value.status==='done') closeWeb();
+  }
+  function openWeb(source, value) {
+    if (web || !['paused','running'].includes(value.status)) return;
+    const frame=document.createElement('iframe');
+    frame.className='coh-web-mini';frame.title=value.en?'Study mini-timer':'Мини-таймер учёбы';
+    frame.hidden=true;
+    const w={frame,key:value.key,room:source.room,origin:window.__castleStudy.scene,dismissed:false};
+    web=w;
+    frame.addEventListener('load',()=>{
+      if(web!==w || w.render)return;
+      const button=launch;
+      closeWeb();
+      if(button?.isConnected)button.title=value.en?'Could not load mini-timer':'Не удалось загрузить мини-таймер';
+    },{once:true});
+    frame.src=skin.url('MiniTimerPanel.html');
+    document.body.append(frame);
+  }
+  function panelFor(child) {
+    const w=web;
+    if (!w || w.frame.contentWindow!==child) return null;
+    return {
+      subscribe(render) {
+        if (web!==w || w.render) return;
+        const value=snapshot();
+        if (!value || value.key!==w.key || value.status==='done' || !adapter.collapse()) {closeWeb();return;}
+        w.render=render;
+        render(value);
+        // Repaint from the saved deadline. This interval owns no timer or rewards.
+        w.repaint=setInterval(updateWeb,250);
+        updateWeb();
+      },
+      action(type,key) {
+        if (web!==w) return;
+        const value=snapshot(),ui=explorer();
+        if (!value || value.key!==w.key) {closeWeb();return;}
+        if (!ui || w.frame.hidden) return;
+        if (type==='restore') {
+          if (window.__castleAdventureCore.requestScene(ui,w.room)) closeWeb();
+        } else if (type==='hide') {
+          w.dismissed=true;updateWeb();
+        } else if (key===w.key && (type==='pause' || type==='resume')) {
+          adapter.change(key,type==='pause');updateWeb();
+        }
+      }
+    };
+  }
+  {
     const style=document.createElement('style');
     style.textContent=`
     html[data-castle-mini-away] .moon-stage *,html[data-castle-mini-away] .adventure-stage *,html[data-castle-mini-away] #castle-adventure-ui *{animation-play-state:paused!important}
@@ -439,26 +531,32 @@ if (!window.CastleMini) {
     .moon-focus .coh-mini-launch{position:absolute;left:calc(50% + 110px);bottom:0}
     .ad-timer .coh-mini-launch{position:relative;margin-top:6px;flex:0 0 35px}
     .home-rest-panel .coh-mini-launch{position:absolute;top:12px;right:12px}
+    .coh-web-mini{position:fixed;z-index:2147482250;border:0;background:transparent;width:min(238px,calc(100vw - 12px));height:74px;color-scheme:light}
+    .coh-web-mini[hidden]{display:none}
+    .ad-timer .coh-web-launch{display:inline-flex;gap:6px;align-items:center;justify-content:center;width:auto;min-width:170px;height:40px;flex:0 0 40px;padding:4px 18px;background-image:var(--paper-strip);font:600 17px/1.1 'Castle Garamond',Georgia,serif;white-space:nowrap}
+    @media (pointer:coarse),(max-width:600px){.ad-timer .coh-web-launch{min-height:var(--ad-touch-size);min-width:max(170px,calc(var(--ad-touch-size) * 3.1));font-size:max(17px,calc(var(--ad-touch-size) * .32))}}
     .coh-mini-error{display:block;background:#4a3540;color:#fff0cf;padding:4px 7px;font:15px Georgia,serif}
     `; document.head.append(style);
   }
   function add(parent,source) {
-    if (!ipc || !parent) return;
+    if (!parent || (!ipc && !source.collapse)) return;
     const b=document.createElement('button');
     b.type='button';b.className='coh-mini-launch';
     b.style.setProperty('--mini-material',skin.cssUrl('Parchment_Seal.webp'));
     b.innerHTML='<svg viewBox="0 0 24 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"><rect x="1.8" y="2" width="20.4" height="15.8" rx="2.1"/><rect x="11.2" y="9.1" width="8" height="5.6" rx=".7" fill="currentColor" stroke="none"/></svg>';
-    function label(){b.title=localStorage.getItem('theCozyTime.language')==='en'?'Mini-timer':'Мини-таймер';b.setAttribute('aria-label',b.title);}
+    if (!ipc) {b.classList.add('coh-web-launch');b.append(document.createElement('span'));}
+    function label(){b.title=localStorage.getItem('theCozyTime.language')==='en'?'Mini-timer':'Мини-таймер';if(!ipc){b.title=window.__castleAdventureCore.tr('Свернуть таймер','Minimize timer');b.lastElementChild.textContent=b.title;}b.setAttribute('aria-label',b.title);}
     label();b.onpointerenter=label;b.onfocus=label;
     b.onclick=()=>{
       if(opening || away) return;
       launch=b;adapter=source;lastMessage='';
       const value=snapshot();if(!value)return;
+      if(!ipc){openWeb(source,value);return;}
       opening=true;send('open',value);
     };
     parent.append(b);
   }
-  window.CastleMini={add,get away(){return away||opening;}};
+  window.CastleMini={add,panelFor,get away(){return away||opening;}};
 }
 };
 gdjs._1063_1072_1089_1086_1074_1072_1103_32_1084_1072_1089_1090_1077_1088_1089_1082_1072_1103Code.userFunc0xaf52a0 = function GDJSInlineCode(runtimeScene) {
@@ -892,6 +990,8 @@ if(typeof window!=='undefined' && typeof document!=='undefined' && !window.__cas
     const finishTitle=q('#ad-success-title');
     finishTitle.tabIndex=-1;
     window.CastleMini?.add(q('.ad-timer'),{
+      room:name,
+      collapse:name==='Забытая библиотека'?()=>core.requestScene(ui,'Комната котика'):null,
       read:()=>owns(core.read().session)?core.miniRead('study'):null,
       change:(key,paused)=>owns(core.read().session) && core.miniChange('study',key,paused),
       refresh:()=>ui.update()
