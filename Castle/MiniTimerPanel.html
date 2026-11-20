@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; img-src 'self'; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'">
+<title>Castle of Hours · Мини-таймер</title>
+<style>
+*{box-sizing:border-box}
+:root{--paper:#493750;--edge:#c4a06c;--gold:#ebc780;--ink:#fff0d0;--track:#6d5a72;--cross:#d4bed3;color-scheme:dark}
+:root[data-theme="doors"]{--paper:#563a2e;--edge:#c7a16d;--gold:#ebc780;--track:#795a46;--cross:#d8beaa}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:transparent;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;user-select:none}
+main{height:100%;position:relative;border:2px solid var(--edge);border-radius:14px;background:var(--paper);color:var(--gold);-webkit-app-region:drag}
+.mark{position:absolute;top:21px;left:10px;width:17px;height:20px;fill:none;stroke:currentColor;stroke-width:2.1;stroke-linecap:round;stroke-linejoin:round}
+.door,.resume,.en{display:none}
+[data-theme="doors"] .moon{display:none}[data-theme="doors"] .door{display:initial}
+.labels{position:absolute;left:37px;top:13px;line-height:1}
+#phase{display:block;font-size:8.5px;letter-spacing:.05em;font-weight:500;margin-bottom:8px}
+#clock{display:block;font-weight:650;font-variant-numeric:tabular-nums lining-nums;font-size:21px;letter-spacing:.015em;color:var(--ink);line-height:1.04;white-space:nowrap}
+nav{position:absolute;right:6px;top:16px;height:28px;display:flex;align-items:center}
+button{width:26px;height:28px;padding:5px;border:0;color:var(--gold);background:none;border-radius:6px;cursor:pointer;-webkit-app-region:no-drag;display:grid;place-items:center}
+button svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke-linejoin:round;stroke-linecap:round}
+button:enabled:hover,button:focus-visible{background:#ffeacb18;color:var(--ink)}button:focus-visible{outline:1px solid var(--gold);outline-offset:-2px}button:active{transform:scale(.94)}
+button:disabled{opacity:.49;cursor:default}#hide{color:var(--cross)}.paused .pause{display:none}.paused .resume{display:block}
+.track{position:absolute;left:10px;right:10px;bottom:10px;height:3.5px;border-radius:4px;background:var(--track);overflow:hidden}
+.fill{height:100%;width:100%;transform:scaleX(0);transform-origin:left center;border-radius:4px;background:var(--gold);transition:transform .235s linear}
+.track.jump .fill{transition:none}
+@media(prefers-reduced-motion:reduce){.fill{transition:none}button:active{transform:none}}
+</style></head>
+<body><main>
+<svg class="mark" viewBox="0 0 24 24" aria-hidden="true"><g class="moon"><path d="M12.1 2.4a9.2 9.2 0 1 0 8.9 9.7A7.2 7.2 0 0 1 12.1 2.4Z"/><path d="M19.7 2.3v4m-2-2h4"/></g><g class="door"><path d="M4 21V11a8 8 0 0 1 16 0v10Z"/><path d="M7 21V11a5 5 0 0 1 10 0v10m-3.2-6.1h.3"/></g></svg>
+<div class="labels"><span id="phase">УЧЁБА</span><span id="clock" role="timer" aria-live="off"></span></div>
+<nav aria-label="Управление таймером">
+<button id="toggle" type="button" title="Пауза" aria-label="Пауза" disabled><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.9"/><path class="pause" d="M10 9.5v5m4-5v5"/><path class="resume" d="m10 8.5 5 3.5-5 3.5Z" fill="currentColor" stroke-width=".7"/></svg></button>
+<button id="restore" type="button" title="Вернуться в замок" aria-label="Вернуться в замок"><svg viewBox="0 0 24 24"><path d="M14 4h6v6m0-6-6.2 6.2M10 20H4v-6m0 6 6.2-6.2"/></svg></button>
+<button id="hide" type="button" title="Скрыть мини-таймер" aria-label="Скрыть мини-таймер"><svg viewBox="0 0 24 24"><path d="m6.2 6.2 11.6 11.6m0-11.6L6.2 17.8"/></svg></button></nav>
+<div class="track" role="progressbar" aria-label="Прогресс интервала" aria-valuemin="0" aria-valuemax="100"><div class="fill"></div></div>
+</main><script src="MagicCursor.js"></script><script src="MiniTimerPanel.js"></script></body></html>
