@@ -2480,20 +2480,107 @@ const core=window.__castleAdventureCore;
         display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;
         font-size:40px;line-height:1;border-radius:15px;box-shadow:0 0 11px #ffcf7055;}
       #castle-adventure-ui .home-sword-chip .sword-caption{font-size:18px;line-height:1.15;white-space:nowrap;}
-      #castle-adventure-ui .home-rest-panel{position:absolute;bottom:117px;left:23px;width:355px;
-        padding:19px 24px 22px;pointer-events:auto;z-index:3;}
-      #castle-adventure-ui .home-rest-panel[hidden]{display:none;}
-      #castle-adventure-ui .home-rest-panel h2{font-size:35px;margin:0 0 7px;text-align:center;}
-      #castle-adventure-ui .home-rest-panel .rest-clock{font-size:56px;text-align:center;font-variant-numeric:tabular-nums;}
-      #castle-adventure-ui .rest-presets{display:flex;gap:7px;justify-content:center;margin:8px 0 13px;}
-      #castle-adventure-ui .rest-presets button{background:#8b5a3b;color:#fff0ce;border:1px solid #d4ab73;
-        border-radius:10px;padding:4px 11px;font-size:20px;}
-      #castle-adventure-ui .rest-presets button.selected{background:#c29151;color:#412419;}
-      #castle-adventure-ui .rest-custom{display:flex;align-items:center;justify-content:center;gap:12px;font-size:23px;}
-      #castle-adventure-ui .rest-custom input{width:74px;font-size:25px;border:2px solid #a06b45;
-        border-radius:8px;background:#fff2d3;color:#573522;text-align:center;pointer-events:auto;}
-      #castle-adventure-ui .rest-actions{display:flex;justify-content:center;gap:8px;margin-top:14px;}
-      #castle-adventure-ui .rest-actions button{font-size:22px;padding:7px 12px;}
+      #castle-adventure-ui .home-rest-panel{
+        position:absolute;inset:auto auto 112px 24px;width:540px;max-width:none;height:auto;aspect-ratio:1311/1200;
+        box-sizing:border-box;margin:0;padding:0;border:0;outline:0;overflow:visible;container-type:inline-size;
+        background:transparent;pointer-events:auto;z-index:3;
+        color:#59331c;font-family:'Castle Garamond',Georgia,serif;text-shadow:none;
+        color-scheme:light;isolation:isolate;
+      }
+      #castle-adventure-ui .home-rest-panel .rest-art{
+        position:absolute;inset:0;z-index:-1;display:block;width:100%;height:100%;
+        object-fit:contain;pointer-events:none;transform:translateZ(0);
+      }
+      #castle-adventure-ui .home-rest-panel[hidden],#castle-adventure-ui .home-rest-panel [hidden]{display:none!important}
+      #castle-adventure-ui .home-rest-panel:modal{
+        position:fixed;inset:0;margin:auto;width:min(94vw,99dvh,540px);max-height:none;
+      }
+      #castle-adventure-ui .home-rest-panel::backdrop{background:rgb(28 16 28 / 48%)}
+      #castle-adventure-ui .home-rest-panel .rest-heading,#castle-adventure-ui .home-rest-panel .rest-clock{
+        position:absolute;left:15%;right:15%;margin:0;padding:0;text-align:center;line-height:1;white-space:nowrap;
+        color:#ffe4ac;text-shadow:0 1px 2px #391e37,0 0 9px #db975774;
+      }
+      #castle-adventure-ui .home-rest-panel .rest-heading{top:17.6%;font-size:6.7cqw;font-weight:600}
+      #castle-adventure-ui .home-rest-panel .rest-clock{
+        top:34.1%;font-size:12.2cqw;font-weight:600;letter-spacing:-.035em;
+        font-variant-numeric:lining-nums tabular-nums;color:#ffe6a3;
+      }
+      #castle-adventure-ui .home-rest-panel .rest-clock.long{font-size:9.7cqw;top:35.2%}
+      #castle-adventure-ui .home-rest-panel :is(.rest-presets,.rest-custom,.rest-actions){
+        position:absolute;left:17%;right:17%;display:flex;align-items:stretch;justify-content:center;gap:1.6cqw;
+        padding:0;margin:0;
+      }
+      #castle-adventure-ui .home-rest-panel .rest-presets{top:54.8%;height:8%}
+      #castle-adventure-ui .home-rest-panel .rest-custom{top:66.2%;height:8%;align-items:center}
+      #castle-adventure-ui .home-rest-panel .rest-actions{top:80%;height:10%;left:19%;right:19%;gap:5%}
+      #castle-adventure-ui .home-rest-panel button.rest-control{
+        position:relative;display:inline-flex;justify-content:center;align-items:center;gap:.35em;
+        min-width:0;height:100%;line-height:1;font:600 4.5cqw/1 'Castle Garamond',Georgia,serif;
+        border:1px solid #8e4c1e!important;border-radius:1.7cqw!important;color:#583018!important;
+        padding:0 .32em!important;text-decoration:none!important;text-shadow:0 1px #fff0c8!important;
+        background:linear-gradient(155deg,#fff0c64d,#d995591f),radial-gradient(ellipse at 50% 33%,#ffe8bc 10%,#f3cb97 67%,#d59b64 100%)!important;
+        box-shadow:inset 0 0 0 1px #ffe6a7,inset 0 0 0 2px #d6954f,inset 0 -3px 5px #8d55284f,0 2px 0 #814a2e,0 3px 5px #723a2633!important;
+        touch-action:manipulation;cursor:pointer;
+      }
+      #castle-adventure-ui .home-rest-panel .rest-presets button.rest-control{flex:1;border-radius:3cqw!important}
+      #castle-adventure-ui .home-rest-panel .rest-presets button.rest-control.selected,#castle-adventure-ui .home-rest-panel .rest-actions button.rest-primary{
+        background:radial-gradient(ellipse at 50% 0%,#98657888,transparent 72%),linear-gradient(155deg,#75445e,#4a2d4c 68%,#73485d)!important;
+        color:#ffe7ad!important;border-color:#b97732!important;text-shadow:0 1px 2px #42223a!important;
+        box-shadow:inset 0 0 0 1px #ffdf93,inset 0 0 0 2px #c3894c,inset 0 0 8px #e3a35c78,0 2px 1px #905427,0 0 5px #edb04b!important;
+      }
+      #castle-adventure-ui .home-rest-panel .rest-presets button.selected::after{
+        content:'◆';position:absolute;bottom:-.62em;font-size:1.65cqw;color:#ffdc89;text-shadow:0 0 3px #a96628;
+      }
+      #castle-adventure-ui .home-rest-panel .rest-custom-label{margin-right:.2em;font-size:4.1cqw;font-weight:600}
+      #castle-adventure-ui .home-rest-panel .rest-custom button{width:7cqw;height:7cqw;border-radius:50%!important;font-size:4.6cqw}
+      #castle-adventure-ui .home-rest-panel .rest-custom input{
+        width:16cqw;height:7cqw;border:1.5px solid #ae7849;border-radius:1.6cqw;box-shadow:inset 0 1px 3px #9c5a302e;
+        background:#ffebc7;color:#532c19;padding:0;text-align:center;font:600 4.4cqw/1 'Castle Garamond',Georgia,serif;
+        appearance:textfield;pointer-events:auto;
+      }
+      #castle-adventure-ui .home-rest-panel input::-webkit-inner-spin-button{appearance:none}
+      #castle-adventure-ui .home-rest-panel .rest-primary{flex:1;font-size:4.8cqw!important;border-radius:3.2cqw!important}
+      #castle-adventure-ui .home-rest-panel .rest-stop{width:9cqw}
+      #castle-adventure-ui .home-rest-panel .rest-glyph{font:normal .75em/1 Georgia,serif}
+      #castle-adventure-ui .home-rest-panel .rest-close{display:none}
+      #castle-adventure-ui .home-rest-panel:modal .rest-close{
+        display:grid;place-items:center;position:absolute;right:1%;top:1%;height:40px;width:40px;border-radius:50%;
+        border:1px solid #e7b968;background:#4d3046;color:#ffdf9f;font:26px/1 Georgia,serif;box-shadow:0 2px 5px #26151b99;
+      }
+      #castle-adventure-ui .home-rest-panel .coh-mini-launch{right:6%;top:79.9%}
+      #castle-adventure-ui .home-rest-panel :is(input,button):focus-visible{outline:2px solid #744477!important;outline-offset:2px}
+      @media(hover:hover){#castle-adventure-ui .home-rest-panel button.rest-control:not(:disabled):hover{filter:brightness(1.08)}}
+      #castle-adventure-ui .home-rest-panel:modal .rest-presets{height:10%;top:53%}
+      #castle-adventure-ui .home-rest-panel:modal .rest-custom{height:10%;top:66%}
+      #castle-adventure-ui .home-rest-panel:modal .rest-step{height:100%;width:10cqw}
+      #castle-adventure-ui .home-rest-panel:modal .rest-custom input{height:100%}
+      #castle-adventure-ui .home-rest-panel:modal .rest-actions{height:11%;top:80%}
+      #castle-adventure-ui .home-rest-panel .rest-presets button.rest-control,#castle-adventure-ui .home-rest-panel .rest-custom input{
+        font-family:Georgia,'Times New Roman',serif;font-size:4.8cqw;font-weight:500;font-variant-numeric:lining-nums tabular-nums;
+      }
+      #castle-adventure-ui .home-rest-panel .rest-custom .rest-step{font:500 4.6cqw/1 Georgia,serif}
+      #castle-adventure-ui .home-rest-panel .rest-actions button.rest-primary{
+        border-radius:3.3cqw!important;font-size:5.6cqw!important;
+        box-shadow:inset 0 0 0 1px #ffe6ac,inset 0 0 0 3px #bb8049,inset 0 -5px 8px #ac6f7377,0 2px 0 #82462b,0 2px 6px #ab642b88!important;
+      }
+      #castle-adventure-ui .home-rest-panel .rest-primary::before,#castle-adventure-ui .home-rest-panel .rest-primary::after{
+        content:'';position:absolute;top:50%;width:1.45cqw;height:1.45cqw;transform:translateY(-50%) rotate(45deg);
+        border:1px solid #bd8038;background:linear-gradient(135deg,#fff2bc,#e7ad56 54%,#a46930);pointer-events:none;
+      }
+      #castle-adventure-ui .home-rest-panel .rest-primary::before{left:-.7cqw}
+      #castle-adventure-ui .home-rest-panel .rest-primary::after{right:-.7cqw}
+      #castle-adventure-ui .home-rest-panel .rest-glyph{
+        display:inline-block;flex:none;width:.65em;height:.65em;background:currentColor;line-height:0;font-size:1em;
+      }
+      #castle-adventure-ui .home-rest-panel .rest-primary .rest-glyph{clip-path:polygon(10% 0,100% 50%,10% 100%)}
+      #castle-adventure-ui .home-rest-panel .rest-primary .rest-glyph.pausing{clip-path:polygon(0 0,35% 0,35% 100%,0 100%,0 0,65% 0,100% 0,100% 100%,65% 100%,65% 0)}
+      #castle-adventure-ui .home-rest-panel .rest-stop .rest-glyph{width:.8em;height:.8em;border-radius:2px}
+      #castle-adventure-ui .home-rest-panel{transform:translateZ(0)}
+      #castle-adventure-ui .home-rest-panel button.rest-control,
+      #castle-adventure-ui .home-rest-panel button.rest-control:is(:hover,:focus-visible,:active):not(:disabled){
+        transition:none;filter:none;scale:1;
+      }
+      @media(hover:hover){#castle-adventure-ui .home-rest-panel button.rest-control:hover{outline:1px solid #ffe6a3;outline-offset:0}}
       #castle-adventure-ui .home-decor{position:absolute;inset:0;pointer-events:none;}
       #castle-adventure-ui .home-decor span{position:absolute;display:block;filter:drop-shadow(0 3px 4px #4b291966);}
       #castle-adventure-ui .home-decor .glowing-fire{left:850px;top:280px;width:190px;height:160px;
@@ -2653,14 +2740,26 @@ const core=window.__castleAdventureCore;
     <button class="castle-btn home-rest-chip room-icon" data-coh-action="hourglass"><span class="rest-chip-title">Отдых</span><small class="rest-chip-time"></small></button>
     <button class="castle-btn home-sword-chip room-icon" data-coh-action="doors" title="К четырём дверям" aria-label="К четырём дверям"><span class="sword-caption">К дверям</span></button>
     <button class="castle-btn home-book-chip room-icon" data-coh-action="book" title="Книга восстановления" aria-label="Книга восстановления"></button>
-    <dialog class="leave-rest"><p></p><button type="button" class="stay-rest"></button><button type="button" class="end-rest"></button></dialog><section class="castle-parchment home-rest-panel" hidden><h2 class="rest-heading">Время отдохнуть</h2>
-      <div class="rest-clock">10:00</div><div class="rest-presets">
-        <button data-minutes="5">5</button><button data-minutes="10" class="selected">10</button>
-        <button data-minutes="15">15</button><button data-minutes="30">30</button></div>
+    <dialog class="leave-rest"><p></p><button type="button" class="stay-rest"></button><button type="button" class="end-rest"></button></dialog><dialog class="home-rest-panel" aria-labelledby="castle-rest-heading" hidden>
+      <img class="rest-art" alt="" aria-hidden="true" draggable="false">
+      <button type="button" class="rest-close" aria-label="Закрыть">×</button>
+      <h2 class="rest-heading" id="castle-rest-heading">Время отдохнуть</h2>
+      <div class="rest-clock" role="timer" aria-live="off">10:00</div>
+      <div class="rest-presets">
+        <button type="button" class="rest-control" data-minutes="5">5</button><button type="button" class="rest-control selected" data-minutes="10">10</button>
+        <button type="button" class="rest-control" data-minutes="15">15</button><button type="button" class="rest-control" data-minutes="30">30</button>
+      </div>
       <div class="rest-custom"><label for="castle-rest-minutes" class="rest-custom-label">Минуты:</label>
-        <input id="castle-rest-minutes" type="number" min="1" max="240" value="10"></div>
-      <div class="rest-actions"><button class="castle-btn rest-start">▶ Начать</button>
-        <button class="castle-btn rest-pause" data-coh-action="pause" data-compact hidden>Ⅱ</button><button class="castle-btn rest-stop" data-coh-action="stop" data-compact>■</button></div></section>
+        <button type="button" class="rest-control rest-step" data-step="-1" aria-label="Уменьшить на минуту">−</button>
+        <input id="castle-rest-minutes" type="number" min="1" max="240" value="10" inputmode="numeric">
+        <button type="button" class="rest-control rest-step" data-step="1" aria-label="Увеличить на минуту">+</button>
+      </div>
+      <div class="rest-actions">
+        <button type="button" class="rest-control rest-primary rest-start"><span class="rest-glyph" aria-hidden="true"></span><span class="rest-caption">Начать</span></button>
+        <button type="button" class="rest-control rest-primary rest-pause" hidden><span class="rest-glyph" aria-hidden="true"></span><span class="rest-caption"></span></button>
+        <button type="button" class="rest-control rest-stop" aria-label="Завершить отдых"><span class="rest-glyph" aria-hidden="true"></span></button>
+      </div>
+    </dialog>
     <dialog class="home-book-shade" aria-labelledby="chronicle-title" hidden>
       <div class="home-book chronicle">
         <section class="home-page left">
@@ -2689,6 +2788,32 @@ const core=window.__castleAdventureCore;
     ui={root,scene,pendingScene:null,lang:null,selected:0,lastDecor:''};
     window.__castleCatHome=ui;
     const q=s=>root.querySelector(s);
+    const restPanel=q('.home-rest-panel'),restChip=q('.home-rest-chip'),minutesInput=q('#castle-rest-minutes');
+    const restArt=q('.rest-art');
+    restArt.src=window.__castleVisuals.url('Rest_Moon_Alcove.webp');
+    restArt.decode?.().catch(()=>{});
+    const compactRest=window.matchMedia('(max-width:740px), (max-height:480px)');
+    function syncRestPanel(){
+      const visible=!restPanel.hidden;
+      restChip.setAttribute('aria-expanded',String(visible));
+      if(restPanel.open&&(!visible||restPanel.matches(':modal')!==compactRest.matches))restPanel.close();
+      if(visible&&!restPanel.open){
+        if(compactRest.matches)restPanel.showModal();else restPanel.show();
+      }
+    }
+    restChip.setAttribute('aria-expanded','false');
+    restPanel.querySelectorAll('[data-minutes]').forEach(b=>b.setAttribute('aria-pressed',String(b.classList.contains('selected'))));
+    const restVisibility=new MutationObserver(syncRestPanel);
+    restVisibility.observe(restPanel,{attributes:true,attributeFilter:['hidden']});
+    compactRest.addEventListener('change',syncRestPanel);
+    const closeRestPanel=()=>{restPanel.hidden=true;syncRestPanel();restChip.focus();};
+    q('.rest-close').onclick=closeRestPanel;
+    restPanel.addEventListener('cancel',event=>{event.preventDefault();closeRestPanel();});
+    restPanel.querySelectorAll('.rest-step').forEach(button=>button.onclick=()=>{
+      const value=minutesInput.valueAsNumber;
+      minutesInput.value=String(Math.max(1,Math.min(240,(Number.isFinite(value)?Math.round(value):10)+Number(button.dataset.step))));
+      minutesInput.dispatchEvent(new Event('input',{bubbles:true}));
+    });
     window.CastleMini?.add(q('.home-rest-panel'),{
       read:()=>core.miniRead('rest',Math.max(0,Math.min(240,Number(q('#castle-rest-minutes').value)||0))),
       change:(key,paused)=>core.miniChange('rest',key,paused),refresh:()=>ui.update()});
@@ -2711,7 +2836,7 @@ const core=window.__castleAdventureCore;
     };
     q('.castle-settings').addEventListener('click',core.openSettings);
     q('.home-rest-chip').addEventListener('click',()=>{
-      q('.home-rest-panel').hidden=!q('.home-rest-panel').hidden;
+      restPanel.hidden=!restPanel.hidden;syncRestPanel();
       ui.book.close();
     });
     q('.rest-finished-ok').addEventListener('click',()=>{
@@ -2719,11 +2844,11 @@ const core=window.__castleAdventureCore;
     });
     q('.rest-presets').querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{
       q('#castle-rest-minutes').value=b.dataset.minutes;
-      q('.rest-presets').querySelectorAll('button').forEach(x=>x.classList.toggle('selected',x===b));
+      q('.rest-presets').querySelectorAll('button').forEach(x=>{x.classList.toggle('selected',x===b);x.setAttribute('aria-pressed',String(x===b))});
       if(!core.read().rest)q('.rest-clock').textContent=core.fmt(+b.dataset.minutes*60);
     }));
     q('#castle-rest-minutes').addEventListener('input',()=>{
-      q('.rest-presets').querySelectorAll('button').forEach(x=>x.classList.toggle('selected',x.dataset.minutes===q('#castle-rest-minutes').value));
+      q('.rest-presets').querySelectorAll('button').forEach(x=>{const selected=x.dataset.minutes===minutesInput.value;x.classList.toggle('selected',selected);x.setAttribute('aria-pressed',String(selected))});
       if(!core.read().rest)q('.rest-clock').textContent=core.fmt((+q('#castle-rest-minutes').value||0)*60);
     });
     q('.rest-start').addEventListener('click',()=>{
@@ -2748,7 +2873,7 @@ const core=window.__castleAdventureCore;
     ui.book=window.CastleBindRestorationBook(ui,core,url);
     ui.resident=window.CastleBindCompanion(ui,core,url);
     ui.guestRoom=window.__castleBindGuestRoom(ui,core,url,ui.resident);
-    ui.dispose=()=>{ui.guestRoom.dispose();ui.resident.dispose();ui.book.dispose();};
+    ui.dispose=()=>{restVisibility.disconnect();compactRest.removeEventListener('change',syncRestPanel);if(restPanel.open)restPanel.close();ui.guestRoom.dispose();ui.resident.dispose();ui.book.dispose();};
     const decor=q('.home-decor');
     const layer=(id,key,opacity=1,transform=false)=>{
       const [file,x,y,w,h]=assets[key];
@@ -2801,7 +2926,10 @@ const core=window.__castleAdventureCore;
       q('.home-sword-chip').setAttribute('aria-label',q('.home-sword-chip').title);
       q('.rest-heading').textContent=en?'Time to rest':'Время отдохнуть';
       q('.rest-custom-label').textContent=en?'Minutes:':'Минуты:';
-      q('.rest-start').innerHTML=window.__castleVisuals.token('play')+(en?' Start':' Начать');
+      q('.rest-start .rest-caption').textContent=en?'Start':'Начать';
+      q('.rest-close').setAttribute('aria-label',en?'Close':'Закрыть');
+      q('.rest-step[data-step="-1"]').setAttribute('aria-label',en?'Subtract one minute':'Уменьшить на минуту');
+      q('.rest-step[data-step="1"]').setAttribute('aria-label',en?'Add one minute':'Увеличить на минуту');
       q('.home-book-chip').title=en?'Restoration book':'Книга восстановления';
       q('.home-book-chip').setAttribute('aria-label',q('.home-book-chip').title);
       chest.labels();ui.guestRoom.album.language();ui.book.render(true);ui.update();
@@ -2810,12 +2938,19 @@ const core=window.__castleAdventureCore;
       const d=core.checkRest(),r=d.rest;ui.guestRest=r;ui.guestLevels=d.upgrades;
       window.__castleVisuals.wallet(q('.castle-balance'),d.coins,core.lang()==='en');
       const remaining=r?core.currentSeconds(r):(+q('#castle-rest-minutes').value||10)*60;
-      q('.rest-clock').textContent=core.fmt(remaining);
+      const clock=q('.rest-clock'),time=core.fmt(remaining);if(clock.textContent!==time)clock.textContent=time;
       q('.rest-chip-time').textContent=r&&!r.finished?core.fmt(remaining):'';
-      q('.rest-pause').hidden=!r||r.running||r.finished;q('.rest-pause').disabled=q('.rest-pause').hidden;
-      if(!q('.rest-pause').hidden){q('.rest-pause').dataset.cohAction='play';window.__castleVisuals.label(q('.rest-pause'),core.tr('Продолжить отдых','Resume break'));}
-      q('.rest-pause').textContent=r&&!r.running?'▶':'Ⅱ';
-      q('.rest-start').disabled=!!(r&&!r.finished);
+      const active=!!r&&!r.finished;
+      q('.rest-start').hidden=active;
+      const pause=q('.rest-pause');
+      pause.hidden=!active;
+      if(active){
+        pause.querySelector('.rest-glyph').classList.toggle('pausing',r.running);
+        const caption=r.running?core.tr('Пауза','Pause'):core.tr('Продолжить','Resume');
+        const label=pause.querySelector('.rest-caption');if(label.textContent!==caption)label.textContent=caption;
+      }
+      q('.rest-clock').classList.toggle('long',q('.rest-clock').textContent.length>5);
+      if(r?.finished&&restPanel.matches(':modal'))closeRestPanel();
       if(r&&r.finished){q('.rest-finished').dataset.interval=core.miniRead('rest').key;q('.rest-finished').hidden=false;
         if(!ui.restFinishedAt)ui.restFinishedAt=Date.now();
         if(window.CastleMini?.away)ui.restFinishedAt=0;
