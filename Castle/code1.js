@@ -4,7 +4,7 @@ gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Co
 gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Code.GDBackgroundObjects1= [];
 
 
-gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Code.userFunc0xb71020 = function GDJSInlineCode(runtimeScene) {
+gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Code.userFunc0xb679b0 = function GDJSInlineCode(runtimeScene) {
 // Domain rules shared by the scene, its journal, and the GDevelop preview.
 if (!window.CastleMoonRules) {
   const STATE_KEY = 'castleOfHours.moonTower.v1';
@@ -158,7 +158,7 @@ if (!window.CastleMoonRules) {
   window.CastleMoonRules={hasLiveOwner,STATE_KEY,DAY,ids,costs,duration,fromSave,localDay,start,abandon,finishRest,reconcile,upgrade,draw,remaining,timeLeft,pause,clockText};
 }
 };
-gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Code.userFunc0xb25e40 = function GDJSInlineCode(runtimeScene) {
+gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Code.userFunc0xb67bc0 = function GDJSInlineCode(runtimeScene) {
 if(typeof window!=='undefined'&&!window.__castleVkResourceChecked){
   window.__castleVkResourceChecked=true;
   if(!window.__castleVkLaunch&&(window.vkBridge?.send||new URLSearchParams(location.search).has('vk_app_id')||new URLSearchParams(location.hash.slice(1)).has('vk_app_id'))){
@@ -380,7 +380,7 @@ if (!window.CastleClockSignals) {
 }
 window.CastleClockSignals.frame();
 };
-gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Code.userFunc0x8c5530 = function GDJSInlineCode(runtimeScene) {
+gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Code.userFunc0xb46f20 = function GDJSInlineCode(runtimeScene) {
 // One notification library for all GDevelop layouts. Its preferences are independent of both wallets.
 if (!window.CastleTimerAlerts) {
   const library=[
@@ -529,7 +529,7 @@ if (!window.CastleTimerAlerts) {
 }
 window.CastleTimerAlerts.enter(runtimeScene.getName());
 };
-gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Code.userFunc0xb638e8 = function GDJSInlineCode(runtimeScene) {
+gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Code.userFunc0xabfcd8 = function GDJSInlineCode(runtimeScene) {
 if(typeof window!=='undefined' && !window.__castleAdventureCore){
 const core = window.__castleAdventureCore || (window.__castleAdventureCore = (() => {
   const KEY='castleOfHours.adventure.v1';
@@ -674,7 +674,7 @@ const core = window.__castleAdventureCore || (window.__castleAdventureCore = (()
 })());
 }
 };
-gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Code.userFunc0xb5a8b8 = function GDJSInlineCode(runtimeScene) {
+gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Code.userFunc0xbdff48 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // Draw an approved room at its design aspect. The native background sprite uses the same painting.
 if(typeof window!=='undefined' && typeof document!=='undefined' && !window.__castleAdventureView){
@@ -885,7 +885,7 @@ if(typeof window!=='undefined' && typeof document!=='undefined' && !window.__cas
   window.__castleAdventureView={run,clock};
 }
 };
-gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Code.userFunc0x8f3990 = function GDJSInlineCode(runtimeScene) {
+gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Code.userFunc0xb410b8 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // Each completed session and its guest draw share one Adventure save.
 if (typeof window !== 'undefined' && !window.__castleGuestLedger) {
@@ -980,7 +980,7 @@ function migrate(data) {
   })();
 }
 };
-gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Code.userFunc0xb16598 = function GDJSInlineCode(runtimeScene) {
+gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Code.userFunc0xbce828 = function GDJSInlineCode(runtimeScene) {
 // Run on each scene's first frame and accept one destination from the current scene instance.
 (function(){
   if(typeof window==='undefined'||typeof document==='undefined')return;
@@ -1022,7 +1022,7 @@ gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Co
   gdjs.evtTools.runtimeScene.replaceScene(runtimeScene,route.name,false);
 })();
 };
-gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Code.userFunc0xbb5060 = function GDJSInlineCode(runtimeScene) {
+gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Code.userFunc0xb15ef0 = function GDJSInlineCode(runtimeScene) {
 // Castle of Hours — approved settings window (RU/EN and master volume).
 // This event only adds the settings overlay. It does not change the scene art,
 // cat animation, study modes, or any other game mechanics.
@@ -1199,7 +1199,7 @@ gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Co
   }
 })();
 };
-gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Code.userFunc0xb32f78 = function GDJSInlineCode(runtimeScene) {
+gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Code.userFunc0x8cbda8 = function GDJSInlineCode(runtimeScene) {
 // Single playback and storage owner for the soundtrack and room ambience.
 (function () {
   const key = 'castleOfHours.audio.v1';
@@ -1300,10 +1300,10 @@ gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Co
   ui.refreshSound();
 })();
 };
-gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Code.userFunc0x8c5320 = function GDJSInlineCode(runtimeScene) {
+gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Code.userFunc0xae29d8 = function GDJSInlineCode(runtimeScene) {
 if(typeof window!=='undefined')window.__castleAdventureView.run(runtimeScene,'corridor');
 };
-gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Code.userFunc0xbcef28 = function GDJSInlineCode(runtimeScene) {
+gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Code.userFunc0x81d3b8 = function GDJSInlineCode(runtimeScene) {
 if(window.__castleResetScene===runtimeScene){
   window.__castleResetScene=null;
   for(const key of ['castleOfHours.adventure.v1','castleOfHours.moonTower.v1'])localStorage.removeItem(key);
@@ -1326,7 +1326,7 @@ gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Co
 {
 
 
-gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Code.userFunc0xb71020(runtimeScene);
+gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Code.userFunc0xb679b0(runtimeScene);
 
 }
 
@@ -1334,7 +1334,7 @@ gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Co
 {
 
 
-gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Code.userFunc0xb25e40(runtimeScene);
+gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Code.userFunc0xb67bc0(runtimeScene);
 
 }
 
@@ -1342,7 +1342,7 @@ gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Co
 {
 
 
-gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Code.userFunc0x8c5530(runtimeScene);
+gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Code.userFunc0xb46f20(runtimeScene);
 
 }
 
@@ -1350,7 +1350,7 @@ gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Co
 {
 
 
-gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Code.userFunc0xb638e8(runtimeScene);
+gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Code.userFunc0xabfcd8(runtimeScene);
 
 }
 
@@ -1358,7 +1358,7 @@ gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Co
 {
 
 
-gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Code.userFunc0xb5a8b8(runtimeScene);
+gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Code.userFunc0xbdff48(runtimeScene);
 
 }
 
@@ -1366,7 +1366,7 @@ gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Co
 {
 
 
-gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Code.userFunc0x8f3990(runtimeScene);
+gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Code.userFunc0xb410b8(runtimeScene);
 
 }
 
@@ -1374,7 +1374,7 @@ gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Co
 {
 
 
-gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Code.userFunc0xb16598(runtimeScene);
+gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Code.userFunc0xbce828(runtimeScene);
 
 }
 
@@ -1382,7 +1382,7 @@ gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Co
 {
 
 
-gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Code.userFunc0xbb5060(runtimeScene);
+gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Code.userFunc0xb15ef0(runtimeScene);
 
 }
 
@@ -1390,7 +1390,7 @@ gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Co
 {
 
 
-gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Code.userFunc0xb32f78(runtimeScene);
+gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Code.userFunc0x8cbda8(runtimeScene);
 
 }
 
@@ -1398,7 +1398,7 @@ gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Co
 {
 
 
-gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Code.userFunc0x8c5320(runtimeScene);
+gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Code.userFunc0xae29d8(runtimeScene);
 
 }
 
@@ -1406,7 +1406,7 @@ gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Co
 {
 
 
-gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Code.userFunc0xbcef28(runtimeScene);
+gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Code.userFunc0x81d3b8(runtimeScene);
 
 }
 

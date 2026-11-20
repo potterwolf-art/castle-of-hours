@@ -4,7 +4,7 @@ gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.idToCallback
 gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.GDMenuBackgroundObjects1= [];
 
 
-gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0x8c5338 = function GDJSInlineCode(runtimeScene) {
+gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0xb679c8 = function GDJSInlineCode(runtimeScene) {
 if(typeof window!=='undefined'&&!window.__castleVkResourceChecked){
   window.__castleVkResourceChecked=true;
   if(!window.__castleVkLaunch&&(window.vkBridge?.send||new URLSearchParams(location.search).has('vk_app_id')||new URLSearchParams(location.hash.slice(1)).has('vk_app_id'))){
@@ -226,7 +226,7 @@ if (!window.CastleClockSignals) {
 }
 window.CastleClockSignals.frame();
 };
-gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0x8c5438 = function GDJSInlineCode(runtimeScene) {
+gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0xb67ac8 = function GDJSInlineCode(runtimeScene) {
 // One notification library for all GDevelop layouts. Its preferences are independent of both wallets.
 if (!window.CastleTimerAlerts) {
   const library=[
@@ -375,7 +375,7 @@ if (!window.CastleTimerAlerts) {
 }
 window.CastleTimerAlerts.enter(runtimeScene.getName());
 };
-gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0xb638e8 = function GDJSInlineCode(runtimeScene) {
+gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0xb67bd8 = function GDJSInlineCode(runtimeScene) {
 // Domain rules shared by the scene, its journal, and the GDevelop preview.
 if (!window.CastleMoonRules) {
   const STATE_KEY = 'castleOfHours.moonTower.v1';
@@ -529,7 +529,7 @@ if (!window.CastleMoonRules) {
   window.CastleMoonRules={hasLiveOwner,STATE_KEY,DAY,ids,costs,duration,fromSave,localDay,start,abandon,finishRest,reconcile,upgrade,draw,remaining,timeLeft,pause,clockText};
 }
 };
-gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0x8c4e18 = function GDJSInlineCode(runtimeScene) {
+gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0xb67480 = function GDJSInlineCode(runtimeScene) {
 if(typeof window!=='undefined' && !window.__castleAdventureCore){
 const core = window.__castleAdventureCore || (window.__castleAdventureCore = (() => {
   const KEY='castleOfHours.adventure.v1';
@@ -674,7 +674,7 @@ const core = window.__castleAdventureCore || (window.__castleAdventureCore = (()
 })());
 }
 };
-gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0x8c4da0 = function GDJSInlineCode(runtimeScene) {
+gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0xb46f20 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // Each completed session and its guest draw share one Adventure save.
 if (typeof window !== 'undefined' && !window.__castleGuestLedger) {
@@ -769,7 +769,7 @@ function migrate(data) {
   })();
 }
 };
-gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0x8f3990 = function GDJSInlineCode(runtimeScene) {
+gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0xb410b8 = function GDJSInlineCode(runtimeScene) {
 // Run on each scene's first frame and accept one destination from the current scene instance.
 (function(){
   if(typeof window==='undefined'||typeof document==='undefined')return;
@@ -811,7 +811,7 @@ gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0x8f
   gdjs.evtTools.runtimeScene.replaceScene(runtimeScene,route.name,false);
 })();
 };
-gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0xbb5060 = function GDJSInlineCode(runtimeScene) {
+gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0xb15ef0 = function GDJSInlineCode(runtimeScene) {
 // Castle of Hours — approved settings window (RU/EN and master volume).
 // This event only adds the settings overlay. It does not change the scene art,
 // cat animation, study modes, or any other game mechanics.
@@ -988,7 +988,7 @@ gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0xbb
   }
 })();
 };
-gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0xb5a8b8 = function GDJSInlineCode(runtimeScene) {
+gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0xabfcd8 = function GDJSInlineCode(runtimeScene) {
 // Single playback and storage owner for the soundtrack and room ambience.
 (function () {
   const key = 'castleOfHours.audio.v1';
@@ -1089,7 +1089,7 @@ gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0xb5
   ui.refreshSound();
 })();
 };
-gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0xbd72e8 = function GDJSInlineCode(runtimeScene) {
+gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0xb08970 = function GDJSInlineCode(runtimeScene) {
 // Castle of Hours — bilingual main menu with reliable click navigation.
 // Transparent interactive hotspots align with the illustrated menu buttons.
 (function () {
@@ -1150,10 +1150,12 @@ gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0xbd
 #cozy-main-menu .settings-icon:is(:hover,:focus-visible){box-shadow:0 0 12px 2px #ffd5888c,inset 0 0 7px #ffcc7777}
 #cozy-main-menu button:hover,#cozy-main-menu button:focus-visible{box-shadow:inset 0 0 13px #ffdf9b99}
 #cozy-main-menu .menu-rug{position:absolute;left:41.986%;top:75.239%;width:21.89%;height:12.01%;background: center/100% 100% no-repeat;pointer-events:none}
-#cozy-main-menu .menu-tools{position:absolute;top:75.666%;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:16.8px}
+#cozy-main-menu .menu-tools{position:absolute;top:75.666%;left:var(--tools-center-x,50%);--icon-width:79.6px;transform:translateX(-50%);display:flex;align-items:center;gap:16.8px}
 #cozy-main-menu .menu-tools::before,#cozy-main-menu .menu-tools::after{content:'';position:absolute;pointer-events:none;width:48px;height:34.5px;top:23px;background:var(--menu-sprig) center/100% 100% no-repeat}
 #cozy-main-menu .menu-tools::before{right:calc(100% - 12px)}#cozy-main-menu .menu-tools::after{left:calc(100% - 12px);transform:scaleX(-1)}
-#cozy-main-menu .menu-tools .menu-icon{display:block;position:relative;inset:auto;width:79.6px;height:78px;padding:0;border:0;border-radius:50%;box-shadow:none;background:transparent center/100% 100% no-repeat;touch-action:manipulation;transition:filter .19s ease,transform .13s ease}
+#cozy-main-menu .menu-tools .menu-icon{display:block;position:relative;inset:auto;width:var(--icon-width);height:78px;padding:0;border:0;border-radius:50%;box-shadow:none;background:transparent center/100% 100% no-repeat;touch-action:manipulation;transition:filter .19s ease,transform .13s ease}
+/* The artwork in each 104 px PNG is centered at x=52.5. Align it with the button center. */
+#cozy-main-menu .menu-tools .menu-icon{background-position-x:calc(var(--icon-width) / -208)}
 #cozy-main-menu .menu-tools .menu-icon::before{display:none}
 #cozy-main-menu .menu-tools .menu-icon:is(:hover,:focus-visible){filter:brightness(1.10) drop-shadow(0 0 4px #ffd58c98);box-shadow:none}
 #cozy-main-menu .menu-tools .menu-icon:focus-visible{outline:2px solid #ffdf97!important;outline-offset:0}
@@ -1333,6 +1335,9 @@ dialog.castle-quit button:focus-visible{outline:2px solid #956f45;outline-offset
   if (canvas) {
     const r=window.__castleVisuals.menuRect(canvas);
     if (r.width>0 && r.height>0) {
+      // Convert the viewport midpoint to the menu's existing 1280-wide coordinate space.
+      const centerX=(document.documentElement.clientWidth/2-r.left)*1280/r.width;
+      ui.root.style.setProperty('--tools-center-x',centerX+'px');
       ui.root.style.left=r.left+'px';
       ui.root.style.top=r.top+'px';
       ui.root.style.transformOrigin='top left';
@@ -1361,7 +1366,7 @@ dialog.castle-quit button:focus-visible{outline:2px solid #956f45;outline-offset
   }
 })();
 };
-gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0xb32f78 = function GDJSInlineCode(runtimeScene) {
+gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0xbdff48 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // Общая реакция котика в меню и комнате.
 if (typeof window !== "undefined" && !window.__castleBindPet) {
@@ -1563,7 +1568,7 @@ if (typeof window !== "undefined" && !window.__castleBindPet) {
 };
 }
 };
-gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0xb16598 = function GDJSInlineCode(runtimeScene) {
+gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0x8cbda8 = function GDJSInlineCode(runtimeScene) {
 // Castle of Hours: gentle cat breath, hover purr, fireplace shimmer and small rare sparks.
 (function(){
  if(typeof window==='undefined'||typeof document==='undefined')return;
@@ -1665,7 +1670,7 @@ gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0xb1
 
 })();
 };
-gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0x8c5288 = function GDJSInlineCode(runtimeScene) {
+gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0xb678f0 = function GDJSInlineCode(runtimeScene) {
 if(window.__castleResetScene===runtimeScene){
   window.__castleResetScene=null;
   for(const key of ['castleOfHours.adventure.v1','castleOfHours.moonTower.v1'])localStorage.removeItem(key);
@@ -1688,7 +1693,7 @@ gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.eventsList0 
 {
 
 
-gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0x8c5338(runtimeScene);
+gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0xb679c8(runtimeScene);
 
 }
 
@@ -1696,7 +1701,7 @@ gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0x8c
 {
 
 
-gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0x8c5438(runtimeScene);
+gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0xb67ac8(runtimeScene);
 
 }
 
@@ -1704,7 +1709,7 @@ gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0x8c
 {
 
 
-gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0xb638e8(runtimeScene);
+gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0xb67bd8(runtimeScene);
 
 }
 
@@ -1712,7 +1717,7 @@ gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0xb6
 {
 
 
-gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0x8c4e18(runtimeScene);
+gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0xb67480(runtimeScene);
 
 }
 
@@ -1720,7 +1725,7 @@ gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0x8c
 {
 
 
-gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0x8c4da0(runtimeScene);
+gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0xb46f20(runtimeScene);
 
 }
 
@@ -1728,7 +1733,7 @@ gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0x8c
 {
 
 
-gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0x8f3990(runtimeScene);
+gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0xb410b8(runtimeScene);
 
 }
 
@@ -1736,7 +1741,7 @@ gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0x8f
 {
 
 
-gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0xbb5060(runtimeScene);
+gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0xb15ef0(runtimeScene);
 
 }
 
@@ -1744,7 +1749,7 @@ gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0xbb
 {
 
 
-gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0xb5a8b8(runtimeScene);
+gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0xabfcd8(runtimeScene);
 
 }
 
@@ -1752,7 +1757,7 @@ gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0xb5
 {
 
 
-gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0xbd72e8(runtimeScene);
+gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0xb08970(runtimeScene);
 
 }
 
@@ -1760,7 +1765,7 @@ gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0xbd
 {
 
 
-gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0xb32f78(runtimeScene);
+gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0xbdff48(runtimeScene);
 
 }
 
@@ -1768,7 +1773,7 @@ gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0xb3
 {
 
 
-gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0xb16598(runtimeScene);
+gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0x8cbda8(runtimeScene);
 
 }
 
@@ -1776,7 +1781,7 @@ gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0xb1
 {
 
 
-gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0x8c5288(runtimeScene);
+gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0xb678f0(runtimeScene);
 
 }
 
