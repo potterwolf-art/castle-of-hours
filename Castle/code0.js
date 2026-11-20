@@ -142,7 +142,9 @@ if(!window.CastleRoomNote){
 }
 if (!window.CastleClockSignals) {
   const motionKey='castleOfHours.residentMotion.v1';
-  const wakeFrameMs=105, wakeFrames=21;
+  const transitionSpeed=2;
+  const wakeFrameMs=105/transitionSpeed, wakeFrames=21;
+  const settleFrameMs=115/transitionSpeed, reverseFrameMs=75/transitionSpeed;
   const wakeDuration=wakeFrameMs*wakeFrames;
   function stops(data){
     if(Array.isArray(data?.companionStops))return data.companionStops.filter(row=>row&&typeof row.id==='string'&&Number.isFinite(row.at));
@@ -164,8 +166,8 @@ if (!window.CastleClockSignals) {
           const m=JSON.parse(localStorage.getItem(motionKey)||'null'),at=Math.min(Date.now(),record.at);
           let next=m;
           if(!m||at>=m.nap){
-            const fold=m&&at<m.nap+32*115?Math.min(31,Math.floor((at-m.nap)/115)):null;
-            next={start:at,nap:Number.MAX_SAFE_INTEGER,fold,sleepFrame:0,release:0,duration:fold==null?wakeDuration:(fold+1)*75};
+            const fold=m&&at<m.nap+32*settleFrameMs?Math.min(31,Math.floor((at-m.nap)/settleFrameMs)):null;
+            next={start:at,nap:Number.MAX_SAFE_INTEGER,fold,sleepFrame:0,release:0,duration:fold==null?wakeDuration:(fold+1)*reverseFrameMs};
           }else if(at>=m.start&&m.nap!==Number.MAX_SAFE_INTEGER&&!m.forced){
             next={...m,nap:Number.MAX_SAFE_INTEGER};
           }
@@ -185,7 +187,7 @@ if (!window.CastleClockSignals) {
     if(home?.root?.isConnected&&home.resident){home.resident.beginInterval();return;}
     try{
       const m=JSON.parse(localStorage.getItem(motionKey)||'null'),now=Date.now();
-      if(m&&now>=m.start+(m.fold==null?(m.release||0)+wakeDuration:(m.fold+1)*75)&&now<m.nap){
+      if(m&&now>=m.start+(m.fold==null?(m.release||0)+wakeDuration:(m.fold+1)*reverseFrameMs)&&now<m.nap){
         localStorage.setItem(motionKey,JSON.stringify({...m,nap:now,forced:true}));
       }
     }catch(_){}
@@ -222,7 +224,7 @@ if (!window.CastleClockSignals) {
     const t=performance.now();if(t-last<160)return;last=t;checkAway();
   }
   document.addEventListener('visibilitychange',()=>{if(!document.hidden)checkAway();});
-  window.CastleClockSignals={mark,stops,publish,send,started,frame,wakeDuration,wakeFrames,wakeFrameMs};
+  window.CastleClockSignals={mark,stops,publish,send,started,frame,wakeDuration,wakeFrames,wakeFrameMs,settleFrameMs,reverseFrameMs,transitionSpeed};
 }
 window.CastleClockSignals.frame();
 };

@@ -390,8 +390,8 @@ if (typeof window !== 'undefined' && !window.CastleBindCompanion) {
     }
     let sleptAt=0, idleAt=0, meowReturn='Awake', motion=null;
     const motionKey='castleOfHours.residentMotion.v1';
-    const {wakeDuration:wakeMs,wakeFrames,wakeFrameMs}=window.CastleClockSignals;
-    const settleMs=32*115;
+    const {wakeDuration:wakeMs,wakeFrames,wakeFrameMs,settleFrameMs,reverseFrameMs,transitionSpeed}=window.CastleClockSignals;
+    const settleMs=32*settleFrameMs;
     function change(next,name){
       if(state===next&&cat.getAnimationName()===name)return;
       state=next;actor.dataset.state=next;actor.dataset.action=name;
@@ -420,8 +420,8 @@ if (typeof window !== 'undefined' && !window.CastleBindCompanion) {
       if(!motion||state==='Meowing')return;
       const age=Math.max(0,now-motion.start);
       const release=motion.release||0;
-      if(motion.fold!=null&&age<motion.duration){
-        change('WakingUp','Cat_FallAsleep');show(Math.max(0,motion.fold-Math.floor(age/75)));return;
+      if(motion.fold!=null&&age<(motion.fold+1)*reverseFrameMs){
+        change('WakingUp','Cat_FallAsleep');show(Math.max(0,motion.fold-Math.floor(age/reverseFrameMs)));return;
       }
       if(motion.fold==null){
         if(release&&age<release){
@@ -432,7 +432,7 @@ if (typeof window !== 'undefined' && !window.CastleBindCompanion) {
         if(age<release+wakeMs){expose('WakingUp','Cat_WakeUp',age-release,wakeFrameMs,wakeFrames);return;}
       }
       if(now<motion.nap||(visit&&!motion.forced&&state==='Awake'))hold();
-      else if(now<motion.nap+settleMs)expose('FallingAsleep','Cat_FallAsleep',now-motion.nap,115,32);
+      else if(now<motion.nap+settleMs)expose('FallingAsleep','Cat_FallAsleep',now-motion.nap,settleFrameMs,32);
       else asleep();
     }
     function wake(fromTimer=false,at=Date.now()){
@@ -441,8 +441,8 @@ if (typeof window !== 'undefined' && !window.CastleBindCompanion) {
       const start=Math.min(at,Date.now());
       const fold=state==='FallingAsleep'?cat.getAnimationFrame():null;
       const sleepFrame=fold==null?cat.getAnimationFrame():0;
-      const release=sleepFrame>1&&sleepFrame<23?Math.min(245,(24-sleepFrame)*22):0;
-      const duration=fold==null?release+wakeMs:(fold+1)*75;
+      const release=sleepFrame>1&&sleepFrame<23?Math.min(245,(24-sleepFrame)*22)/transitionSpeed:0;
+      const duration=fold==null?release+wakeMs:(fold+1)*reverseFrameMs;
       const nap=fromTimer?Number.MAX_SAFE_INTEGER:start+duration+40000+Math.floor(40000*Math.random());
       writeMotion({start,nap,duration,release,sleepFrame,fold});applyMotion();return true;
     }
@@ -773,7 +773,9 @@ if(!window.CastleRoomNote){
 }
 if (!window.CastleClockSignals) {
   const motionKey='castleOfHours.residentMotion.v1';
-  const wakeFrameMs=105, wakeFrames=21;
+  const transitionSpeed=2;
+  const wakeFrameMs=105/transitionSpeed, wakeFrames=21;
+  const settleFrameMs=115/transitionSpeed, reverseFrameMs=75/transitionSpeed;
   const wakeDuration=wakeFrameMs*wakeFrames;
   function stops(data){
     if(Array.isArray(data?.companionStops))return data.companionStops.filter(row=>row&&typeof row.id==='string'&&Number.isFinite(row.at));
@@ -795,8 +797,8 @@ if (!window.CastleClockSignals) {
           const m=JSON.parse(localStorage.getItem(motionKey)||'null'),at=Math.min(Date.now(),record.at);
           let next=m;
           if(!m||at>=m.nap){
-            const fold=m&&at<m.nap+32*115?Math.min(31,Math.floor((at-m.nap)/115)):null;
-            next={start:at,nap:Number.MAX_SAFE_INTEGER,fold,sleepFrame:0,release:0,duration:fold==null?wakeDuration:(fold+1)*75};
+            const fold=m&&at<m.nap+32*settleFrameMs?Math.min(31,Math.floor((at-m.nap)/settleFrameMs)):null;
+            next={start:at,nap:Number.MAX_SAFE_INTEGER,fold,sleepFrame:0,release:0,duration:fold==null?wakeDuration:(fold+1)*reverseFrameMs};
           }else if(at>=m.start&&m.nap!==Number.MAX_SAFE_INTEGER&&!m.forced){
             next={...m,nap:Number.MAX_SAFE_INTEGER};
           }
@@ -816,7 +818,7 @@ if (!window.CastleClockSignals) {
     if(home?.root?.isConnected&&home.resident){home.resident.beginInterval();return;}
     try{
       const m=JSON.parse(localStorage.getItem(motionKey)||'null'),now=Date.now();
-      if(m&&now>=m.start+(m.fold==null?(m.release||0)+wakeDuration:(m.fold+1)*75)&&now<m.nap){
+      if(m&&now>=m.start+(m.fold==null?(m.release||0)+wakeDuration:(m.fold+1)*reverseFrameMs)&&now<m.nap){
         localStorage.setItem(motionKey,JSON.stringify({...m,nap:now,forced:true}));
       }
     }catch(_){}
@@ -853,7 +855,7 @@ if (!window.CastleClockSignals) {
     const t=performance.now();if(t-last<160)return;last=t;checkAway();
   }
   document.addEventListener('visibilitychange',()=>{if(!document.hidden)checkAway();});
-  window.CastleClockSignals={mark,stops,publish,send,started,frame,wakeDuration,wakeFrames,wakeFrameMs};
+  window.CastleClockSignals={mark,stops,publish,send,started,frame,wakeDuration,wakeFrames,wakeFrameMs,settleFrameMs,reverseFrameMs,transitionSpeed};
 }
 window.CastleClockSignals.frame();
 };
