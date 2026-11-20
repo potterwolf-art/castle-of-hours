@@ -5,7 +5,7 @@ gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.GDBackgroundObjects1= [];
 gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.GDCat1Objects1= [];
 
 
-gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xb16758 = function GDJSInlineCode(runtimeScene) {
+gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xac7638 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // Each completed session and its guest draw share one Adventure save.
 if (typeof window !== 'undefined' && !window.__castleGuestLedger) {
@@ -100,7 +100,7 @@ function migrate(data) {
   })();
 }
 };
-gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xb15ef0 = function GDJSInlineCode(runtimeScene) {
+gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0x8c34e8 = function GDJSInlineCode(runtimeScene) {
 if(typeof window!=='undefined' && !window.__castleAdventureCore){
 const core = window.__castleAdventureCore || (window.__castleAdventureCore = (() => {
   const KEY='castleOfHours.adventure.v1';
@@ -245,7 +245,7 @@ const core = window.__castleAdventureCore || (window.__castleAdventureCore = (()
 })());
 }
 };
-gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0x81ce20 = function GDJSInlineCode(runtimeScene) {
+gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xb6ff20 = function GDJSInlineCode(runtimeScene) {
 if(typeof window!=='undefined'&&!window.__castleVkResourceChecked){
   window.__castleVkResourceChecked=true;
   if(!window.__castleVkLaunch&&(window.vkBridge?.send||new URLSearchParams(location.search).has('vk_app_id')||new URLSearchParams(location.hash.slice(1)).has('vk_app_id'))){
@@ -467,7 +467,7 @@ if (!window.CastleClockSignals) {
 }
 window.CastleClockSignals.frame();
 };
-gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xb46f20 = function GDJSInlineCode(runtimeScene) {
+gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0x81cc80 = function GDJSInlineCode(runtimeScene) {
 // Loaded once by the timer scenes. Ordinary browser exports retain their original interface.
 if (!window.CastleMini) {
   let ipc, adapter, launch, clock, opening=false, away=false, shown=false, lastMessage='';
@@ -548,7 +548,7 @@ if (!window.CastleMini) {
   window.CastleMini={add,get away(){return away||opening;}};
 }
 };
-gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xabfcd8 = function GDJSInlineCode(runtimeScene) {
+gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0x8f3998 = function GDJSInlineCode(runtimeScene) {
 // One notification library for all GDevelop layouts. Its preferences are independent of both wallets.
 if (!window.CastleTimerAlerts) {
   const library=[
@@ -697,7 +697,7 @@ if (!window.CastleTimerAlerts) {
 }
 window.CastleTimerAlerts.enter(runtimeScene.getName());
 };
-gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0x81d3b8 = function GDJSInlineCode(runtimeScene) {
+gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xb2aa28 = function GDJSInlineCode(runtimeScene) {
 // Run on each scene's first frame and accept one destination from the current scene instance.
 (function(){
   if(typeof window==='undefined'||typeof document==='undefined')return;
@@ -739,7 +739,7 @@ gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0x81d3b8 = function GD
   gdjs.evtTools.runtimeScene.replaceScene(runtimeScene,route.name,false);
 })();
 };
-gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xbdff48 = function GDJSInlineCode(runtimeScene) {
+gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xaf52a0 = function GDJSInlineCode(runtimeScene) {
 // Castle of Hours — approved settings window (RU/EN and master volume).
 // This event only adds the settings overlay. It does not change the scene art,
 // cat animation, study modes, or any other game mechanics.
@@ -916,7 +916,7 @@ gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xbdff48 = function GD
   }
 })();
 };
-gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xbad308 = function GDJSInlineCode(runtimeScene) {
+gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xb777f0 = function GDJSInlineCode(runtimeScene) {
 // Single playback and storage owner for the soundtrack and room ambience.
 (function () {
   const key = 'castleOfHours.audio.v1';
@@ -1017,7 +1017,7 @@ gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xbad308 = function GD
   ui.refreshSound();
 })();
 };
-gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xbce828 = function GDJSInlineCode(runtimeScene) {
+gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xacbed8 = function GDJSInlineCode(runtimeScene) {
 // Domain rules shared by the scene, its journal, and the GDevelop preview.
 if (!window.CastleMoonRules) {
   const STATE_KEY = 'castleOfHours.moonTower.v1';
@@ -1171,7 +1171,7 @@ if (!window.CastleMoonRules) {
   window.CastleMoonRules={hasLiveOwner,STATE_KEY,DAY,ids,costs,duration,fromSave,localDay,start,abandon,finishRest,reconcile,upgrade,draw,remaining,timeLeft,pause,clockText};
 }
 };
-gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xae29d8 = function GDJSInlineCode(runtimeScene) {
+gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xb78240 = function GDJSInlineCode(runtimeScene) {
 if(!window.CastleMoonData){
   const cards=[
   {
@@ -1325,7 +1325,7 @@ if(!window.CastleMoonData){
 `;
 }
 };
-gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xb679b0 = function GDJSInlineCode(runtimeScene) {
+gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xac77f8 = function GDJSInlineCode(runtimeScene) {
 if (!window.CastleMoonPainting) {
   window.CastleMoonPainting = function(root,url) {
     const cat=root.querySelector('.moon-kitten'),sky=root.querySelector('.moon-fireworks');
@@ -1436,7 +1436,7 @@ if (!window.CastleMoonPainting) {
   };
 }
 };
-gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xb35420 = function GDJSInlineCode(runtimeScene) {
+gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xac6e80 = function GDJSInlineCode(runtimeScene) {
 if(!window.CastleMoonScene){
 window.CastleMoonScene=function(scene){
   const R=window.CastleMoonRules, D=window.CastleMoonData, V=window.__castleVisuals;
@@ -1912,7 +1912,7 @@ window.CastleMoonScene=function(scene){
 };
 }
 };
-gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xb410b8 = function GDJSInlineCode(runtimeScene) {
+gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xac6cc0 = function GDJSInlineCode(runtimeScene) {
 if(typeof document!=='undefined' && window.__castleScreenFade?.pending?.from!==runtimeScene.getName()){
   let tower=window.__castleMoonTower;
   if(!tower||tower.scene!==runtimeScene||!tower.root.isConnected){
@@ -1923,7 +1923,7 @@ if(typeof document!=='undefined' && window.__castleScreenFade?.pending?.from!==r
   tower.tick();
 }
 };
-gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xb67bc0 = function GDJSInlineCode(runtimeScene) {
+gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xac6de0 = function GDJSInlineCode(runtimeScene) {
 if(window.__castleResetScene===runtimeScene){
   window.__castleResetScene=null;
   for(const key of ['castleOfHours.adventure.v1','castleOfHours.moonTower.v1'])localStorage.removeItem(key);
@@ -1946,7 +1946,7 @@ gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.eventsList0 = function(runtime
 {
 
 
-gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xb16758(runtimeScene);
+gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xac7638(runtimeScene);
 
 }
 
@@ -1954,7 +1954,7 @@ gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xb16758(runtimeScene)
 {
 
 
-gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xb15ef0(runtimeScene);
+gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0x8c34e8(runtimeScene);
 
 }
 
@@ -1962,7 +1962,7 @@ gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xb15ef0(runtimeScene)
 {
 
 
-gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0x81ce20(runtimeScene);
+gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xb6ff20(runtimeScene);
 
 }
 
@@ -1970,7 +1970,7 @@ gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0x81ce20(runtimeScene)
 {
 
 
-gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xb46f20(runtimeScene);
+gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0x81cc80(runtimeScene);
 
 }
 
@@ -1978,7 +1978,7 @@ gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xb46f20(runtimeScene)
 {
 
 
-gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xabfcd8(runtimeScene);
+gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0x8f3998(runtimeScene);
 
 }
 
@@ -1986,7 +1986,7 @@ gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xabfcd8(runtimeScene)
 {
 
 
-gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0x81d3b8(runtimeScene);
+gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xb2aa28(runtimeScene);
 
 }
 
@@ -1994,7 +1994,7 @@ gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0x81d3b8(runtimeScene)
 {
 
 
-gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xbdff48(runtimeScene);
+gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xaf52a0(runtimeScene);
 
 }
 
@@ -2002,7 +2002,7 @@ gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xbdff48(runtimeScene)
 {
 
 
-gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xbad308(runtimeScene);
+gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xb777f0(runtimeScene);
 
 }
 
@@ -2010,7 +2010,7 @@ gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xbad308(runtimeScene)
 {
 
 
-gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xbce828(runtimeScene);
+gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xacbed8(runtimeScene);
 
 }
 
@@ -2018,7 +2018,7 @@ gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xbce828(runtimeScene)
 {
 
 
-gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xae29d8(runtimeScene);
+gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xb78240(runtimeScene);
 
 }
 
@@ -2026,7 +2026,7 @@ gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xae29d8(runtimeScene)
 {
 
 
-gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xb679b0(runtimeScene);
+gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xac77f8(runtimeScene);
 
 }
 
@@ -2034,7 +2034,7 @@ gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xb679b0(runtimeScene)
 {
 
 
-gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xb35420(runtimeScene);
+gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xac6e80(runtimeScene);
 
 }
 
@@ -2042,7 +2042,7 @@ gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xb35420(runtimeScene)
 {
 
 
-gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xb410b8(runtimeScene);
+gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xac6cc0(runtimeScene);
 
 }
 
@@ -2050,7 +2050,7 @@ gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xb410b8(runtimeScene)
 {
 
 
-gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xb67bc0(runtimeScene);
+gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xac6de0(runtimeScene);
 
 }
 
