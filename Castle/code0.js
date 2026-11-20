@@ -1104,7 +1104,7 @@ gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0xb7
     root.innerHTML = `
       <style>
         
-        #cozy-main-menu {position:fixed;width:1280px;height:720px;z-index:2147482000;pointer-events:none;
+        #cozy-main-menu {--mode-left:409px;--mode-width:524px;position:fixed;width:1280px;height:720px;z-index:2147482000;pointer-events:none;
           font-family:'Castle Garamond',Georgia,serif; color:#442414;isolation:isolate;}
         #cozy-main-menu * {box-sizing:border-box;}
         /* The watercolor background is the entire design: no wood plates or outlines. */
@@ -1139,7 +1139,7 @@ gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0xb7
         #cozy-main-menu .toast.show {opacity:1;}
         #cozy-main-menu .home-caption{position:absolute;left:670px;top:650px;width:125px;
           text-align:center;font-size:22px;color:#ffedc7;text-shadow:0 2px 4px #30150e;}
-      #cozy-main-menu .mode{left:409px;width:524px;height:126px}
+      #cozy-main-menu .mode{left:var(--mode-left);width:var(--mode-width);height:126px}
 #cozy-main-menu .doors{top:246px}#cozy-main-menu .pomodoro{top:395px}
 #cozy-main-menu .mode[data-lang=ru] span,#cozy-main-menu .heart-icon,#cozy-main-menu .home-caption{display:none}
 
@@ -1148,7 +1148,7 @@ gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0xb7
 #cozy-main-menu .settings-icon:is(:hover,:focus-visible){box-shadow:0 0 12px 2px #ffd5888c,inset 0 0 7px #ffcc7777}
 #cozy-main-menu button:hover,#cozy-main-menu button:focus-visible{box-shadow:inset 0 0 13px #ffdf9b99}
 #cozy-main-menu .menu-rug{position:absolute;left:41.986%;top:75.239%;width:21.89%;height:12.01%;background: center/100% 100% no-repeat;pointer-events:none}
-#cozy-main-menu .menu-tools{position:absolute;top:75.666%;left:50%;--icon-width:79.6px;transform:translateX(-50%);display:flex;align-items:center;gap:16.8px}
+#cozy-main-menu .menu-tools{position:absolute;top:75.666%;left:calc(var(--mode-left) + var(--mode-width) / 2);--icon-width:79.6px;transform:translateX(-50%);display:flex;align-items:center;gap:16.8px}
 #cozy-main-menu .menu-tools::before,#cozy-main-menu .menu-tools::after{content:'';position:absolute;pointer-events:none;width:48px;height:34.5px;top:23px;background:var(--menu-sprig) center/100% 100% no-repeat}
 #cozy-main-menu .menu-tools::before{right:calc(100% - 12px)}#cozy-main-menu .menu-tools::after{left:calc(100% - 12px);transform:scaleX(-1)}
 #cozy-main-menu .menu-tools .menu-icon{display:block;position:relative;inset:auto;width:var(--icon-width);height:78px;padding:0;border:0;border-radius:50%;box-shadow:none;background:transparent center/100% 100% no-repeat;touch-action:manipulation;transition:filter .19s ease,transform .13s ease}
