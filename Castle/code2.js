@@ -487,15 +487,25 @@ if (typeof window !== 'undefined' && !window.CastleBindCompanion) {
       const rect=canvas.getBoundingClientRect();
       if(!rect.width||!rect.height)return;
       const origin=camera.convertCoords(0,0), cw=camera.getCameraWidth(), ch=camera.getCameraHeight();
-      const key=[cw,ch,rect.width,rect.height,origin[0],origin[1]].join('/');
+      const key=[cw,ch,origin[0],origin[1],rect.left,rect.top,rect.width,rect.height].join('/');
       if(geometry===key)return;
-      geometry=key;left=origin[0];top=origin[1];ratioX=cw/1280;ratioY=ch/720;
-      const uniform=Math.min(rect.width/1280,rect.height/720);
-      const sx=uniform*cw/rect.width, sy=uniform*ch/rect.height;
+      geometry=key;
+      // One fitted stage for the painting, the resident, its hit area and the HUD.
+      const stage=window.__castleVisuals.menuRect(canvas);
+      const scale=stage.width/1280;
+      Object.assign(root.style,{left:stage.left+'px',top:stage.top+'px',
+        transformOrigin:'top left',transform:'scale('+scale+')'});
+      const finger=(44/scale)+'px';
+      for(const name of ['--kitten-finger','--book-finger-x','--book-finger-y'])root.style.setProperty(name,finger);
+      // Convert the same CSS-pixel rectangle to the native camera coordinate system.
+      const worldPerPixelX=cw/rect.width, worldPerPixelY=ch/rect.height;
+      left=origin[0]+(stage.left-rect.left)*worldPerPixelX;
+      top=origin[1]+(stage.top-rect.top)*worldPerPixelY;
+      ratioX=scale*worldPerPixelX;ratioY=scale*worldPerPixelY;
       const x=left+848*ratioX,y=top+546*ratioY;
-      cat.setScaleX(155*sx/256);cat.setScaleY(155*sy/256);cat.setPosition(x,y);
+      cat.setScaleX(155*ratioX/256);cat.setScaleY(155*ratioY/256);cat.setPosition(x,y);
       for(const o of [back,front]) {
-        o.setScaleX(216*sx/512);o.setScaleY(216*sy/512);o.setPosition(x,y-5*sy);
+        o.setScaleX(216*ratioX/512);o.setScaleY(216*ratioY/512);o.setPosition(x,y-5*ratioY);
       }
       actor.style.left='848px';actor.style.top='546px';
       for(const entry of paintings.values())placePainting(entry);
@@ -1641,20 +1651,7 @@ function bindGuestRoom(ui,core,url,resident) {
   const actors=Array.from({length:4},(_,i)=>{const el=document.createElement(i===0?'canvas':'i');stage.append(el);return el});
   const toast=document.createElement('div');toast.className='guest-toast';toast.setAttribute('role','status');toast.hidden=true;root.append(toast);
   const visitor=actors[0], context=visitor.getContext('2d');
-  // The original room stretches to its canvas. Keep new paintings at their
-  // native aspect while their bottom-center anchor follows that room.
-  const gameCanvas=document.querySelector('canvas');
-  function fitGuestArt(){
-    const bounds=gameCanvas?.getBoundingClientRect();
-    if(!bounds?.width||!bounds.height)return;
-    const sx=bounds.width/1280,sy=bounds.height/720,uniform=Math.min(sx,sy);
-    root.style.setProperty('--kitten-finger',(44/uniform)+'px');root.style.setProperty('--book-finger-x',(44/sx)+'px');root.style.setProperty('--book-finger-y',(44/sy)+'px');
-    root.style.setProperty('--guest-sx',uniform/sx);root.style.setProperty('--guest-sy',uniform/sy);
-  }
-  const resize=typeof ResizeObserver==='function'?new ResizeObserver(fitGuestArt):null;
-  if(gameCanvas)resize?.observe(gameCanvas);
-  window.addEventListener('resize',fitGuestArt);fitGuestArt();
-
+  const gameCanvas=ui.scene.getGame().getRenderer().getCanvas();
   let edgeSize=288,lastCard='',lastSample=-1;
   function guestResolution(){
     const {width,height}=gameCanvas?.getBoundingClientRect()||{width:1280,height:720};
@@ -1783,7 +1780,7 @@ function bindGuestRoom(ui,core,url,resident) {
   function visibility(){last=now();if(!isVisible())flush()}
   function external(e){if(e.key==='castleOfHours.adventure.v1'){readIn=0;album.render()}}
   function dispose(){
-    if(disposed)return;disposed=true;resize?.disconnect();artResize?.disconnect();window.removeEventListener('resize',fitGuestArt);flush();clearStage();album.dispose();
+    if(disposed)return;disposed=true;artResize?.disconnect();flush();clearStage();album.dispose();
     window.removeEventListener('storage',external);
     window.removeEventListener('pagehide',visibilityOff);window.removeEventListener('blur',visibility);
     window.removeEventListener('focus',visibility);document.removeEventListener('visibilitychange',visibility);
@@ -2429,7 +2426,7 @@ const core=window.__castleAdventureCore;
     if(ui){ui.dispose?.();ui.root?.remove()}
     const root=document.createElement('div');root.id='castle-adventure-ui';
     root.innerHTML=`<style>
-#castle-adventure-ui{position:fixed;width:1280px;height:720px;z-index:2147482200;pointer-events:none;isolation:isolate;
+#castle-adventure-ui{position:fixed;width:1280px;height:720px;z-index:2147482200;pointer-events:none;isolation:isolate;overflow:clip;box-shadow:0 0 0 300vmax #261b22;--coh-disc-x:1;--coh-disc-y:1;
   font-family:'Castle Garamond',Georgia,serif;color:#ffeac1;text-shadow:0 1px 3px #42251a;}
 #castle-adventure-ui *{box-sizing:border-box;}
 #castle-adventure-ui button,#castle-adventure-ui input{font-family:inherit;}
@@ -2830,7 +2827,6 @@ const core=window.__castleAdventureCore;
     };
   }
   if(ui.pendingScene){core.switchIfPending(ui,scene,'__castleCatHome');return;}
-  core.align(ui.root);
   if(ui.lang!==core.lang()){ui.lang=core.lang();ui.renderLanguage()}
   if(!ui.lastTick||Date.now()-ui.lastTick>180){ui.lastTick=Date.now();ui.update()}
   ui.guestRoom.tick(ui.guestRest,ui.guestLevels,['WakingUp','Stretching'].includes(ui.resident.state));
