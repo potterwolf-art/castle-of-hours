@@ -4,10 +4,10 @@ gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Co
 gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Code.GDBackgroundObjects1= [];
 
 
-gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Code.userFunc0xb40470 = function GDJSInlineCode(runtimeScene) {
+gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Code.userFunc0xb01e58 = function GDJSInlineCode(runtimeScene) {
 // Domain rules shared by the scene, its journal, and the GDevelop preview.
 if (!window.CastleMoonRules) {
-  const STATE_KEY = 'castleOfHours.moonTower.v1';
+  const STATE_KEY = 'castleOfHours.qa.moonTower.v1';
   const DAY = 24 * 60 * 60 * 1000;
   const ids = ['MoonWindowLevel','TelescopeLevel','LibraryLevel','CatCornerLevel','TarotTableLevel'];
   const costs = [12,30,54];
@@ -143,10 +143,10 @@ if (!window.CastleMoonRules) {
   async function hasLiveOwner(owner) {
     if(!owner)return false;
     if(navigator.locks?.query){
-      try{return (await navigator.locks.query()).held.some(lock=>lock.name==='castleOfHours.moon.page.'+owner);}catch{}
+      try{return (await navigator.locks.query()).held.some(lock=>lock.name==='castleOfHours.qa.moon.page.'+owner);}catch{}
     }
     if(!window.BroadcastChannel)return false;
-    const probe=new BroadcastChannel('castleOfHours.moon.presence');
+    const probe=new BroadcastChannel('castleOfHours.qa.moon.presence');
     const requester=window.crypto?.randomUUID?.()||String(Math.random());
     return new Promise(resolve=>{
       const done=alive=>{clearTimeout(timeout);probe.close();resolve(alive);};
@@ -158,14 +158,93 @@ if (!window.CastleMoonRules) {
   window.CastleMoonRules={hasLiveOwner,STATE_KEY,DAY,ids,costs,duration,fromSave,localDay,start,abandon,finishRest,reconcile,upgrade,draw,remaining,timeLeft,pause,clockText};
 }
 };
-gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Code.userFunc0xbacd88 = function GDJSInlineCode(runtimeScene) {
-if(typeof window!=='undefined'&&!window.__castleVkResourceChecked){
-  window.__castleVkResourceChecked=true;
-  if(!window.__castleVkLaunch&&(window.vkBridge?.send||new URLSearchParams(location.search).has('vk_app_id')||new URLSearchParams(location.hash.slice(1)).has('vk_app_id'))){
-    const file=runtimeScene.getGame().getGameData().resources.resources.find(r=>r.name==='VKLaunch.js');
-    if(file){const tag=document.createElement('script');tag.src=file.file;document.head.appendChild(tag);}
+gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Code.userFunc0xc8ac98 = function GDJSInlineCode(runtimeScene) {
+"use strict";
+// Included only by the editable QA project and its test export.
+if(typeof window!=='undefined'&&!window.__castleDeveloper){
+  const adventure='castleOfHours.qa.adventure.v1', moon='castleOfHours.qa.moonTower.v1';
+  const clockKey='castleOfHours.qa.clock.v1';
+  const read=(key)=>{try{return JSON.parse(localStorage.getItem(key)||'null');}catch(_){return null;}};
+  function seedTestSaves(){
+    if(localStorage.getItem('castleOfHours.qa.seeded.v1'))return;
+    for(const [from,to] of [['castleOfHours.adventure.v1',adventure],['castleOfHours.moonTower.v1',moon]]){
+      const original=localStorage.getItem(from);
+      if(original!==null&&localStorage.getItem(to)===null)localStorage.setItem(to,original);
+    }
+    localStorage.setItem('castleOfHours.qa.seeded.v1','1');
   }
+  try{seedTestSaves();}catch(_){}
+  const prior=read(clockKey),start=Date.now();
+  let clock={real:start,virtual:Number.isFinite(prior?.virtual)&&Number.isFinite(prior?.real)?
+    prior.virtual+(start-prior.real):start,speed:1};
+  const now=()=>clock.virtual+(Date.now()-clock.real)*clock.speed;
+  function persist(){try{localStorage.setItem(clockKey,JSON.stringify({real:Date.now(),virtual:now()}));}catch(_){}}
+  const panel=document.createElement('dialog');panel.id='castle-dev-console';
+  panel.setAttribute('aria-label','Режим разработчика');
+  panel.innerHTML=`<style>
+#castle-dev-console{position:fixed;inset:0;margin:auto;padding:0;width:min(470px,92vw);max-height:90dvh;overflow:auto;border:1px solid #a78350;border-radius:14px;background:#f3dfbf;color:#422c30;font:16px/1.4 Georgia,serif;box-shadow:0 9px 45px #24162588;z-index:2147483646}
+#castle-dev-console::backdrop{background:#21162596}
+#castle-dev-console .panel{padding:22px 24px}#castle-dev-console h2{margin:0 22px 12px 0;font-size:24px}
+#castle-dev-console .close{float:right}#castle-dev-console [hidden]{display:none!important}
+#castle-dev-console .actions{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}
+#castle-dev-console :is(input,select,button){padding:6px 10px;font:inherit;color:#422c30;background:#fff2d8;border:1px solid #947347;border-radius:7px}
+#castle-dev-console label{display:block;margin:8px 0}#castle-dev-console input{max-width:95%}
+#castle-dev-console .status{min-height:1.5em;margin:8px 0 0}
+</style><div class="panel"><button type="button" class="close" aria-label="Закрыть">×</button>
+<h2>Режим разработчика</h2><form class="locked"><label for="castle-dev-code">Код разработчика</label>
+<input id="castle-dev-code" type="password" autocomplete="off" spellcheck="false"><button type="submit" class="unlock">Открыть</button></form>
+<div class="unlocked" hidden><label>Скорость учебного таймера <select class="speed"><option value="1">×1</option><option value="10">×10</option><option value="60">×60</option><option value="600">×600</option><option value="3600">×3600</option></select></label>
+<div class="actions"><button class="adventure">+1 000 000 звёзд</button><button class="moon">+1 000 000 лунных монет</button></div>
+<div class="actions"><button class="both">Добавить обе валюты</button><button class="zero">Обнулить тестовые валюты</button></div></div>
+<p class="status" role="status" aria-live="polite"></p></div>`;
+  document.body.append(panel);
+  const q=s=>panel.querySelector(s),status=s=>q('.status').textContent=s;
+  let unlocked=false,previous=null;
+  function close(){if(panel.open)panel.close();}
+  function open(){
+    previous=document.activeElement;status('');q('.locked').hidden=unlocked;q('.unlocked').hidden=!unlocked;
+    q('.speed').value=String(clock.speed);panel.classList.add('open');panel.showModal();
+    (unlocked?q('.speed'):q('input')).focus({preventScroll:true});
+  }
+  panel.addEventListener('close',()=>{panel.classList.remove('open');q('input').value='';if(previous?.isConnected)previous.focus({preventScroll:true});});
+  q('.close').onclick=close;
+  panel.addEventListener('pointerdown',e=>{if(e.target!==panel)return;
+    const b=panel.getBoundingClientRect();
+    if(e.clientX<b.left||e.clientX>b.right||e.clientY<b.top||e.clientY>b.bottom)close();
+  });
+  q('.locked').addEventListener('submit',e=>{
+    e.preventDefault();
+    const code=q('input').value.trim().toUpperCase().replace(/[🌙☾🌛🌜\uFE0F\s]/gu,'');
+    if(code!=='MOON-DEV-2026'){status('Неверный код.');q('input').select();return;}
+    unlocked=true;q('input').value='';q('.locked').hidden=true;q('.unlocked').hidden=false;q('.speed').focus();status('Режим разработчика открыт.');
+  });
+  q('.speed').onchange=()=>{
+    if(!unlocked)return;const value=Number(q('.speed').value);if(![1,10,60,600,3600].includes(value))return;
+    clock={virtual:now(),real:Date.now(),speed:value};persist();status('Скорость ×'+value);
+  };
+  function adjust(key,zero=false){
+    if(!unlocked)return;
+    const d=read(key)||{};d.coins=zero?0:Math.max(0,Math.floor(Number(d.coins)||0))+1000000;
+    localStorage.setItem(key,JSON.stringify(d));
+    if(key===moon)window.__castleMoonTower?.reloadWallet?.();else window.__castleCatHome?.update?.();
+  }
+  q('.adventure').onclick=()=>{adjust(adventure);status('Добавлено 1 000 000 звёзд.');};
+  q('.moon').onclick=()=>{adjust(moon);status('Добавлено 1 000 000 лунных монет.');};
+  q('.both').onclick=()=>{adjust(adventure);adjust(moon);status('Добавлены обе тестовые валюты.');};
+  q('.zero').onclick=()=>{adjust(adventure,true);adjust(moon,true);status('Тестовые валюты обнулены.');};
+  window.addEventListener('keydown',e=>{
+    const letter=(e.key||'').toLowerCase();
+    if(!(e.ctrlKey||e.metaKey)||!e.shiftKey||e.altKey||
+       !(e.code==='KeyD'||(!e.code||e.code==='Unidentified')&&['d','в'].includes(letter)))return;
+    e.preventDefault();e.stopImmediatePropagation();
+    if(!e.repeat){if(panel.open)close();else open();}
+  },true);
+  window.addEventListener('pagehide',persist);
+  window.__castleDeveloper={getSpeed:()=>clock.speed};
+  window.__castleDevTimeNow=now;
 }
+};
+gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Code.userFunc0xb43790 = function GDJSInlineCode(runtimeScene) {
 // Shared control illustrations and resource URLs follow the GDevelop export map.
 if(typeof window!=='undefined' && typeof document!=='undefined' && !window.__castleVisuals){
   const resources=new Map(runtimeScene.getGame().getGameData().resources.resources.map(r=>[r.name,r.file]));
@@ -193,10 +272,42 @@ if(typeof window!=='undefined' && typeof document!=='undefined' && !window.__cas
   }
   style.textContent=fonts.join('\n')+'\n:root{--coh-star:'+cssUrl('Adventure_Star.png')+'}'+
     icons.map(key=>'[data-coh-action="'+key+'"]{--coh-glyph:'+cssUrl('Control_'+key+'.png')+'}').join('\n')+
-    "/* The same control material is used with a single, cream-coloured symbol. */\n[data-coh-action]{--disc-size:62px;position:relative;width:var(--disc-size)!important;height:var(--disc-size)!important;min-width:0!important;border:0!important;border-radius:50%!important;background:none!important;box-shadow:none!important;color:transparent!important;font-size:0!important;padding:0!important;cursor:pointer;touch-action:manipulation;isolation:isolate}\n[data-coh-action][data-compact]{--disc-size:41px}\n[data-coh-action]::before{content:\"\"!important;position:absolute;inset:0;display:block;background:var(--coh-glyph) center/contain no-repeat;transform:scale(var(--coh-disc-x,1),var(--coh-disc-y,1));filter:drop-shadow(0 2px 2px #29160970);transition:filter .2s ease,translate .12s ease;pointer-events:none}\n[data-coh-action]:is(:hover,:focus-visible)::before{filter:brightness(1.1) drop-shadow(0 0 5px #ffc37a8a)}\n[data-coh-action]:active::before{translate:0 1px;filter:brightness(1.04)}\n[data-coh-action]:focus-visible{outline:2px solid #ffdf9b!important;outline-offset:2px}\n[data-coh-action][disabled]{cursor:default}\n[data-coh-action][disabled]::before{filter:saturate(.4);opacity:.66}\n.coh-mini{display:inline-block;width:31px;height:31px;vertical-align:middle;object-fit:contain}\n.coh-star,.book-coin{display:inline-block;width:1.12em;height:1.12em;vertical-align:-.18em;background:var(--coh-star) center/contain no-repeat!important;image-rendering:auto!important}\n#castle-adventure-ui .coh-balance{position:absolute;top:20px;right:95px;min-width:117px;width:auto;height:48px;display:flex;align-items:center;justify-content:center;gap:6px;padding:4px 15px 5px 10px;border:1px solid #cea469;border-radius:21px;background:linear-gradient(100deg,#58331dba,#43271bbc)!important;color:#fff0ce;font:600 28px/1 'Castle Garamond',Georgia,serif;white-space:nowrap;font-variant-numeric:lining-nums tabular-nums;box-shadow:inset 0 1px #f0ca8921,0 2px 4px #34201548;text-shadow:0 1px 3px #301b0d}\n#castle-adventure-ui .coh-balance .coh-star{width:35px;height:35px;flex:none}\n#castle-adventure-ui .room-icon[data-coh-action]{background:none!important;filter:none!important;image-rendering:auto}\n#castle-adventure-ui .room-icon[data-coh-action] .sword-caption,#castle-adventure-ui .room-icon[data-coh-action] .rest-chip-title{color:#ffedc4;bottom:-12px}\n#castle-adventure-ui .room-icon[data-coh-action] .rest-chip-time{color:#ffedc4;z-index:1}\n#castle-adventure-ui .room-icon.home-sword-chip[data-coh-action]{left:609px}\n#castle-adventure-ui .room-icon.album-trigger[data-coh-action]{right:111px;bottom:26px}\n#castle-adventure-ui .room-icon.home-book-chip[data-coh-action]{right:27px}\n#castle-adventure-ui .home-rest-panel .rest-stop[data-coh-action]{vertical-align:middle}\n#castle-adventure-ui .book-chapter .chapter-icon{background:none;border:0}\n#castle-adventure-ui .book-chapter .coh-mini{width:41px;height:41px}\n#cozy-settings-root .castle-audio-options .music-toggle{display:flex;align-items:center;gap:7px}\n#cozy-settings-root .castle-audio-options label .coh-mini{width:25px;height:25px;margin-right:6px}\n#castle-moon-tower .shop-row .zone-icon .coh-mini{width:37px;height:37px}\n\n#castle-adventure-ui.adventure-stage{position:fixed;z-index:2147482200;overflow:hidden;pointer-events:none;isolation:isolate;background:#2c2019;font-family:'Castle Garamond',Georgia,serif;color:#ffebc5}\n.adventure-stage *{box-sizing:border-box}\n.adventure-stage::before{content:\"\";position:absolute;inset:-22px;background:var(--scene-paint) center/cover;filter:blur(17px) brightness(.51)}\n.adventure-stage .ad-canvas{position:absolute;left:50%;top:50%;width:1280px;height:720px;transform-origin:50% 50%;background:var(--scene-paint) center/100% 100% no-repeat;overflow:hidden;--coh-disc-x:1;--coh-disc-y:1}\n.adventure-stage button{font-family:inherit;pointer-events:auto}\n.adventure-stage [hidden]{display:none!important}\n.adventure-stage .ad-nav,.adventure-stage .ad-settings{position:absolute;top:12px;z-index:3}\n.adventure-stage .ad-nav{left:17px}.adventure-stage .ad-settings{right:17px}\n.adventure-stage h1,.adventure-stage p{margin:0}\n.adventure-stage .ad-header{position:absolute;top:14px;left:215px;right:215px;text-align:center;text-shadow:0 2px 5px #321c10,0 0 16px #342519bb;pointer-events:none}\n.adventure-stage .ad-heading{font-size:52px;font-weight:600;line-height:1.03;letter-spacing:.005em;color:#ffebc4}\n.adventure-stage .ad-sub{font-size:24px;line-height:1.12;margin-top:4px;font-weight:600}\n.adventure-stage .ad-corridor-hint{position:absolute;left:10%;right:10%;bottom:21px;text-align:center;font-size:24px;font-weight:600;line-height:1.15;text-shadow:0 1px 4px #2b1b11,0 0 10px #342013}\n.adventure-stage .ad-corridor-hint::before,.adventure-stage .ad-corridor-hint::after{content:\"\";width:53px;height:1px;vertical-align:middle;display:inline-block;margin:0 14px;background:linear-gradient(90deg,transparent,#e2b777)}\n.adventure-stage .ad-corridor-hint::after{transform:rotate(180deg)}\n.adventure-stage .castle-door{position:absolute;background:transparent;border:0;padding:0;cursor:pointer;border-radius:48% 48% 1% 1% / 30% 30% 1% 1%;-webkit-tap-highlight-color:transparent;touch-action:manipulation}\n.adventure-stage .door-leaf{position:absolute;inset:0;display:block;pointer-events:none;background-position:center;background-repeat:no-repeat;background-size:100% 100%}\n.adventure-stage .door-leaf{transition:filter .22s}\n.adventure-stage .castle-door:is(:hover,:focus-visible):not(:disabled) .door-leaf{filter:brightness(1.16) drop-shadow(0 0 3px #f5b96d)}\n.adventure-stage .castle-door:focus-visible{outline:2px solid #ffdfa1;outline-offset:-4px}\n.adventure-stage .castle-door[data-state=waiting] .door-leaf{filter:brightness(1.13)}\n.adventure-stage .castle-door[data-state=locked] .door-leaf{filter:brightness(.81) saturate(.83)}\n.adventure-stage .castle-resume{position:absolute;left:50%;bottom:56px;transform:translateX(-50%);max-width:820px;width:max-content;text-align:center;padding:11px 21px 13px;border:1px solid #c39b66;border-radius:15px;background:#422c1cef;box-shadow:0 3px 13px #26180b66;pointer-events:auto}\n.adventure-stage .resume-text{font-size:23px;line-height:1.15;margin-bottom:8px}\n.adventure-stage .text-button{font:600 22px/1.12 'Castle Garamond',Georgia,serif;min-height:38px;padding:6px 18px;border-radius:13px;border:1px solid #cca071;background:linear-gradient(#895932,#654024);color:#fff0d0;cursor:pointer;box-shadow:0 1px 3px #462b1a40}\n.adventure-stage .text-button:hover,.adventure-stage .text-button:focus-visible{filter:brightness(1.09);outline:1px solid #ebc88d}\n.adventure-stage .actions{display:flex;justify-content:center;gap:12px}\n.adventure-stage .ad-study-heading{top:15px}\n.adventure-stage .ad-study-heading .ad-heading{font-size:44px}\n.adventure-stage .ad-study-heading .ad-heading::before,.adventure-stage .ad-study-heading .ad-heading::after{content:\"❧\";display:inline-block;font-size:31px;color:#eed098;font-weight:400;vertical-align:5px;margin:0 14px}\n.adventure-stage .ad-study-heading .ad-heading::after{transform:scaleX(-1)}\n.adventure-stage .ad-timer{position:absolute;left:0;right:0;top:26.6%;height:45.5%;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;isolation:isolate;text-align:center}\n.adventure-stage .ad-timer::before{content:\"\";position:absolute;z-index:-1;left:12%;right:12%;top:-18%;bottom:-7%;background:radial-gradient(ellipse at center,#2d241a87 0%,#332a2077 30%,#3c30224d 52%,transparent 74%);pointer-events:none}\n.adventure-stage .clock-time{font-family:'Castle Garamond',Georgia,serif;font-variant-numeric:lining-nums tabular-nums;font-weight:500;font-size:221px;line-height:1;letter-spacing:-.025em;color:#ffe5ac;text-shadow:0 2px 5px #48351e88,0 1px 15px #432f1d4d}\n.adventure-stage .clock-divider{display:flex;align-items:center;gap:12px;height:31px;margin-top:1px;color:#fada9e;font:24px/1 Georgia,serif}\n.adventure-stage .clock-divider::before,.adventure-stage .clock-divider::after{content:\"\";height:1px;width:110px;background:linear-gradient(90deg,transparent,#efcc88)}\n.adventure-stage .clock-divider::after{transform:rotate(180deg)}\n.adventure-stage .clock-label{font-weight:600;font-size:31px;line-height:1.2;margin-top:1px;color:#ffebba;text-shadow:0 2px 5px #3a301c,0 0 8px #3a301c7a}\n.adventure-stage .legacy-resume{margin-top:10px}\n.adventure-stage .castle-modal-shade{position:absolute;inset:0;display:grid;place-items:center;z-index:5;pointer-events:auto;background:#2d201ab5}\n.adventure-stage .castle-modal{max-width:630px;padding:26px 37px;text-align:center;color:#4e3221;background:linear-gradient(130deg,#f8e3bb,#f2d6aa 58%,#f8e6c3);border:2px solid #ba925e;border-radius:19px;box-shadow:0 10px 32px #26170d66}\n.adventure-stage .castle-modal h2{margin:0 0 5px;font-weight:600;font-size:39px;line-height:1.07}\n.adventure-stage .castle-modal p{font-size:25px;line-height:1.16;margin:9px 0 18px}\n.adventure-stage .reward-chip{display:inline-flex;align-items:center;gap:.13em;font-weight:600;white-space:nowrap}\n.adventure-stage .castle-door[data-state=chosen] .door-leaf{filter:brightness(1.09)}\n@media(prefers-reduced-motion:reduce){.adventure-stage .door-leaf,[data-coh-action]::before{transition:none!important}}\n#castle-adventure-ui .book-art .coh-mini{width:80px;height:80px}\n\n.adventure-stage .ad-nav::after,.adventure-stage .ad-settings::after{content:'';position:absolute;top:0;width:var(--ad-touch-size,62px);height:var(--ad-touch-size,62px);border-radius:50%}\n.adventure-stage .ad-nav::after{left:0}.adventure-stage .ad-settings::after{right:0}\n";
-  for(const [key,name] of Object.entries({"paper-strip": "Parchment_Strip.webp", "paper-seal": "Parchment_Seal.webp", "ink-hourglass": "Ink_hourglass.png", "ink-doors": "Ink_doors.png", "ink-deck": "Ink_deck.png", "ink-right": "Ink_right.png", "ink-star": "Ink_star.png", "ink-moon": "Ink_moon.png"}))document.documentElement.style.setProperty('--'+key,cssUrl(name));
-  style.textContent+='\n'+":root{--coh-ink:#51311f;--coh-russet:#754725;--coh-thread:#8e708d;--coh-shade:drop-shadow(0 2px 2px #35201665)}\n/* Artwork is the shared surface. The original button element owns focus, click and touch. */\n[data-coh-action][data-coh-action]{border-radius:10px!important}\n[data-coh-action][data-coh-action]::before{filter:var(--coh-shade);transition:filter .16s ease,scale .1s ease;image-rendering:auto}\n[data-coh-action][data-coh-action]:is(:hover,:focus-visible):not(:disabled)::before{filter:brightness(1.045) drop-shadow(0 0 4px #edbe75aa)}\n[data-coh-action][data-coh-action]:active:not(:disabled)::before{scale:.965;translate:none}\n:is(#castle-adventure-ui,#castle-moon-tower,#cozy-settings-root) :is(.text-button,.rest-start,.rest-finished-ok,.rest-presets button,.book-purchase,.book-chapter,.guest-entry,.moon-primary,.moon-secondary,.moon-smalllink,.cozy-language,.music-toggle,.progress-reset,.progress-dialog button,.preview-alert,.leave-rest button,.actions button:not([data-coh-action]),.unlock,.moon-days button){\n background:var(--paper-strip) center/100% 100% no-repeat!important;color:var(--coh-ink)!important;\n border:0!important;border-radius:5px!important;box-shadow:none!important;text-shadow:none!important;\n filter:var(--coh-shade);text-decoration:none!important;cursor:pointer;touch-action:manipulation;transition:filter .16s ease,scale .1s ease;\n}\n:is(#castle-adventure-ui,#castle-moon-tower,#cozy-settings-root) :is(.text-button,.rest-start,.rest-finished-ok,.book-purchase,.moon-primary,.moon-secondary,.moon-smalllink,.preview-alert,.progress-reset,.progress-dialog button,.leave-rest button,.actions button:not([data-coh-action]),.unlock){padding:8px 19px 12px!important;font-family:'Castle Garamond',Georgia,serif}\n:is(#castle-adventure-ui,#castle-moon-tower,#cozy-settings-root) :is(.text-button,.rest-start,.rest-finished-ok,.rest-presets button,.book-purchase,.book-chapter,.guest-entry,.moon-primary,.moon-secondary,.moon-smalllink,.cozy-language,.music-toggle,.progress-reset,.progress-dialog button,.preview-alert,.leave-rest button,.actions button,.unlock,.moon-days button,.memory-thumb,.moon-slot):is(:hover,:focus-visible):not(:disabled){filter:brightness(1.045) drop-shadow(0 0 3px #c6934d8c)}\n:is(#castle-adventure-ui,#castle-moon-tower,#cozy-settings-root) button:where(:not(.castle-door,.room-cat,.moon-pet,.moon-prop,.moon-flip,[data-coh-action])):active:not(:disabled){scale:.975}\n:is(#castle-adventure-ui,#castle-moon-tower,#cozy-settings-root) button:focus-visible{outline:2px solid #865d81!important;outline-offset:1px}\n:is(#castle-adventure-ui,#castle-moon-tower,#cozy-settings-root) :is(.guest-entry[aria-pressed=true],.cozy-language[aria-pressed=true],.book-chapter.active,.rest-presets button.selected,.moon-days button.chosen){color:#50314e!important;text-decoration:underline!important;text-underline-offset:.2em;text-decoration-color:#a980a0!important}\n#castle-adventure-ui .book-chapter{padding:6px 14px 9px}#castle-adventure-ui .guest-entry{padding:6px 12px 9px}\n#castle-adventure-ui .book-purchase:disabled,#castle-moon-tower .buy:disabled{opacity:.66;cursor:default}\n#castle-adventure-ui .chapter-name,#castle-adventure-ui .guest-entry{color:var(--coh-ink)}\n#castle-adventure-ui .coh-balance.coh-balance,#castle-moon-tower .moon-wallet.moon-wallet{background:var(--paper-strip) center/100% 100% no-repeat!important;border:0!important;border-radius:0!important;box-shadow:none!important;text-shadow:none!important;color:var(--coh-ink)!important;filter:var(--coh-shade);padding:7px 18px 12px!important;gap:4px;white-space:nowrap}\n#castle-adventure-ui .coh-balance .coh-star{width:29px;height:29px;background:var(--ink-star) center/contain no-repeat!important}\n#castle-moon-tower .moon-wallet i{width:24px;height:24px;font-size:0;background:var(--ink-moon) center/contain no-repeat}\n#castle-adventure-ui .room-icon:is(.home-rest-chip,.home-sword-chip)[data-coh-action]{width:100px!important;height:77px!important;--disc-size:77px}\n#castle-adventure-ui .room-icon.home-sword-chip[data-coh-action]{left:590px}\n#castle-adventure-ui .room-icon:is(.home-rest-chip,.home-sword-chip)[data-coh-action]::before{background-image:var(--paper-seal);background-size:100% 100%}\n#castle-adventure-ui .home-rest-chip::after,#castle-adventure-ui .home-sword-chip::after{content:\"\";position:absolute;left:0;right:0;top:8%;height:50%;background:var(--ink-gl) center/contain no-repeat;pointer-events:none}\n#castle-adventure-ui .home-rest-chip{--ink-gl:var(--ink-hourglass)}#castle-adventure-ui .home-sword-chip{--ink-gl:var(--ink-doors)}\n#castle-adventure-ui .room-icon[data-coh-action] :is(.sword-caption,.rest-chip-title){bottom:17%!important;color:var(--coh-ink)!important;text-shadow:none;font:600 18px/1 'Castle Garamond',Georgia,serif}\n#castle-adventure-ui .room-icon .rest-chip-time:not(:empty){right:-13px;bottom:11px;color:var(--coh-ink)!important;background:var(--paper-strip) center/100% 100%;padding:3px 8px 6px;text-shadow:none}\n#castle-adventure-ui .memory-thumb{border:2px solid #b18b5f;border-radius:5px;background:#efdbb8}#castle-adventure-ui .memory-thumb[aria-pressed=true]{outline:2px solid #93728c}\n#castle-adventure-ui .leave-rest{max-width:min(470px,80%);background:#f5e2c1;color:var(--coh-ink);border:1px solid #9c805c;border-radius:12px;padding:22px 30px;text-align:center;font:600 24px 'Castle Garamond',serif}\n#castle-adventure-ui .leave-rest::backdrop{background:#34251b77}\n#castle-adventure-ui .leave-rest button{font-size:21px;margin:0 5px}\n#castle-moon-tower .moon-focus,#castle-moon-tower.portrait .moon-focus{left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;width:45%}\n#castle-moon-tower.portrait .moon-focus{width:68%}\n#castle-moon-tower .moon-cycle{width:100%}#castle-moon-tower .clock{text-align:center}\n#castle-moon-tower .moon-prop[data-item=MoonWindowLevel],#castle-moon-tower .moon-prop[data-item=TelescopeLevel]{clip-path:none}\n#castle-moon-tower .moon-prop[data-item=TelescopeLevel]{height:39%;width:17%;left:15%;bottom:18.3%}\n#castle-moon-tower .moon-prop[data-item=TelescopeLevel] .paint,#castle-moon-tower .moon-prop[data-item=CatCornerLevel][data-level=\"3\"] .paint{object-fit:contain}\n#castle-moon-tower .moon-prop[data-item=CatCornerLevel][data-level=\"3\"]{left:66.9%;bottom:6.9%;width:29%;height:21.4%;clip-path:none}\n#castle-moon-tower .moon-kitten.finished-nook{bottom:15.2%}\n#castle-moon-tower .moon-bar nav{gap:11px}\n#castle-moon-tower .moon-deck-icon{width:24px;height:24px;font-size:0;background:var(--ink-deck) center/contain no-repeat;border:0;box-shadow:none;transform:none}\n#castle-moon-tower .moon-cal-nav .next{transform:none}\n#castle-moon-tower .moon-slot{border-color:#987650}\n#castle-moon-tower .moon-slot:disabled{background:var(--paper-seal) center/100% 100% no-repeat;color:#7b5c40;border:0}\n#castle-moon-tower .moon-slot:disabled::before{display:none}\n#castle-moon-tower .moon-days button{background-image:var(--paper-seal)!important;padding-bottom:3px}\n#castle-moon-tower .moon-days .marked{color:#5c3d62!important;font-weight:700}\n#castle-moon-tower .moon-smalllink{line-height:1.15}\n#castle-moon-tower.portrait .moon-prop[data-item=TelescopeLevel]{height:27%;width:23%;left:8%;bottom:22%}\n#castle-moon-tower.portrait .moon-prop[data-item=CatCornerLevel][data-level=\"3\"]{width:40%;height:15%;left:55%;bottom:10.5%}\n#castle-moon-tower.portrait .moon-kitten.finished-nook{bottom:16.3%}\n.castle-notifications{border-top:1px solid #b6966d;padding-top:8px;margin-top:10px;text-align:left;color:var(--coh-ink);font:500 19px/1.15 'Castle Garamond',Georgia,serif}\n.castle-notifications label{display:block;margin:4px 0}\n.castle-notifications select{display:block;width:100%;margin:3px 0 8px;padding:5px 8px;color:var(--coh-ink);background:#faebd3;border:1px solid #af8a60;border-radius:4px;font:inherit}\n.castle-notifications input[type=range]{display:block;width:100%;accent-color:#8a6a83}\n.castle-notifications output{float:right}.castle-notifications .preview-alert{font-size:19px}\n#cozy-settings-root .cozy-panel{scrollbar-color:#a38866 #eddabc}\n\n\n@media(prefers-reduced-motion:reduce){button,button::before{transition-duration:.01s!important}}\n";
+    "/* The same control material is used with a single, cream-coloured symbol. */\n[data-coh-action]{--disc-size:62px;position:relative;width:var(--disc-size)!important;height:var(--disc-size)!important;min-width:0!important;border:0!important;border-radius:50%!important;background:none!important;box-shadow:none!important;color:transparent!important;font-size:0!important;padding:0!important;cursor:pointer;touch-action:manipulation;isolation:isolate}\n[data-coh-action][data-compact]{--disc-size:41px}\n[data-coh-action]::before{content:\"\"!important;position:absolute;inset:0;display:block;background:var(--coh-glyph) center/contain no-repeat;transform:scale(var(--coh-disc-x,1),var(--coh-disc-y,1));filter:drop-shadow(0 2px 2px #29160970);transition:filter .2s ease,translate .12s ease;pointer-events:none}\n[data-coh-action]:is(:hover,:focus-visible)::before{filter:brightness(1.1) drop-shadow(0 0 5px #ffc37a8a)}\n[data-coh-action]:active::before{translate:0 1px;filter:brightness(1.04)}\n[data-coh-action]:focus-visible{outline:2px solid #ffdf9b!important;outline-offset:2px}\n[data-coh-action][disabled]{cursor:default}\n[data-coh-action][disabled]::before{filter:saturate(.4);opacity:.66}\n.coh-mini{display:inline-block;width:31px;height:31px;vertical-align:middle;object-fit:contain}\n.coh-star,.book-coin{display:inline-block;width:1.12em;height:1.12em;vertical-align:-.18em;background:var(--coh-star) center/contain no-repeat!important;image-rendering:auto!important}\n#castle-adventure-ui .coh-balance{position:absolute;top:20px;right:95px;min-width:117px;width:auto;height:48px;display:flex;align-items:center;justify-content:center;gap:6px;padding:4px 15px 5px 10px;border:1px solid #cea469;border-radius:21px;background:linear-gradient(100deg,#58331dba,#43271bbc)!important;color:#fff0ce;font:600 28px/1 'Castle Garamond',Georgia,serif;white-space:nowrap;font-variant-numeric:lining-nums tabular-nums;box-shadow:inset 0 1px #f0ca8921,0 2px 4px #34201548;text-shadow:0 1px 3px #301b0d}\n#castle-adventure-ui .coh-balance .coh-star{width:35px;height:35px;flex:none}\n#castle-adventure-ui .room-icon[data-coh-action]{background:none!important;filter:none!important;image-rendering:auto}\n#castle-adventure-ui .room-icon[data-coh-action] .sword-caption,#castle-adventure-ui .room-icon[data-coh-action] .rest-chip-title{color:#ffedc4;bottom:-12px}\n#castle-adventure-ui .room-icon[data-coh-action] .rest-chip-time{color:#ffedc4;z-index:1}\n#castle-adventure-ui .room-icon.home-sword-chip[data-coh-action]{left:609px}\n#castle-adventure-ui .room-icon.album-trigger[data-coh-action]{right:111px;bottom:26px}\n#castle-adventure-ui .room-icon.home-book-chip[data-coh-action]{right:27px}\n#castle-adventure-ui .home-rest-panel .rest-stop[data-coh-action]{vertical-align:middle}\n#castle-adventure-ui .book-chapter .chapter-icon{background:none;border:0}\n#castle-adventure-ui .book-chapter .coh-mini{width:41px;height:41px}\n#cozy-settings-root .castle-audio-options .music-toggle{display:flex;align-items:center;gap:7px}\n#cozy-settings-root .castle-audio-options label .coh-mini{width:25px;height:25px;margin-right:6px}\n#castle-moon-tower .shop-row .zone-icon .coh-mini{width:37px;height:37px}\n#castle-dev-console .close[data-coh-action]{--disc-size:34px}\n#castle-adventure-ui.adventure-stage{position:fixed;z-index:2147482200;overflow:hidden;pointer-events:none;isolation:isolate;background:#2c2019;font-family:'Castle Garamond',Georgia,serif;color:#ffebc5}\n.adventure-stage *{box-sizing:border-box}\n.adventure-stage::before{content:\"\";position:absolute;inset:-22px;background:var(--scene-paint) center/cover;filter:blur(17px) brightness(.51)}\n.adventure-stage .ad-canvas{position:absolute;left:50%;top:50%;width:1280px;height:720px;transform-origin:50% 50%;background:var(--scene-paint) center/100% 100% no-repeat;overflow:hidden;--coh-disc-x:1;--coh-disc-y:1}\n.adventure-stage button{font-family:inherit;pointer-events:auto}\n.adventure-stage [hidden]{display:none!important}\n.adventure-stage .ad-nav,.adventure-stage .ad-settings{position:absolute;top:12px;z-index:3}\n.adventure-stage .ad-nav{left:17px}.adventure-stage .ad-settings{right:17px}\n.adventure-stage h1,.adventure-stage p{margin:0}\n.adventure-stage .ad-header{position:absolute;top:14px;left:215px;right:215px;text-align:center;text-shadow:0 2px 5px #321c10,0 0 16px #342519bb;pointer-events:none}\n.adventure-stage .ad-heading{font-size:52px;font-weight:600;line-height:1.03;letter-spacing:.005em;color:#ffebc4}\n.adventure-stage .ad-sub{font-size:24px;line-height:1.12;margin-top:4px;font-weight:600}\n.adventure-stage .ad-corridor-hint{position:absolute;left:10%;right:10%;bottom:21px;text-align:center;font-size:24px;font-weight:600;line-height:1.15;text-shadow:0 1px 4px #2b1b11,0 0 10px #342013}\n.adventure-stage .ad-corridor-hint::before,.adventure-stage .ad-corridor-hint::after{content:\"\";width:53px;height:1px;vertical-align:middle;display:inline-block;margin:0 14px;background:linear-gradient(90deg,transparent,#e2b777)}\n.adventure-stage .ad-corridor-hint::after{transform:rotate(180deg)}\n.adventure-stage .castle-door{position:absolute;background:transparent;border:0;padding:0;cursor:pointer;border-radius:48% 48% 1% 1% / 30% 30% 1% 1%;-webkit-tap-highlight-color:transparent;touch-action:manipulation}\n.adventure-stage .door-leaf{position:absolute;inset:0;display:block;pointer-events:none;background-position:center;background-repeat:no-repeat;background-size:100% 100%}\n.adventure-stage .door-leaf{transition:filter .22s}\n.adventure-stage .castle-door:is(:hover,:focus-visible):not(:disabled) .door-leaf{filter:brightness(1.16) drop-shadow(0 0 3px #f5b96d)}\n.adventure-stage .castle-door:focus-visible{outline:2px solid #ffdfa1;outline-offset:-4px}\n.adventure-stage .castle-door[data-state=waiting] .door-leaf{filter:brightness(1.13)}\n.adventure-stage .castle-door[data-state=locked] .door-leaf{filter:brightness(.81) saturate(.83)}\n.adventure-stage .castle-resume{position:absolute;left:50%;bottom:56px;transform:translateX(-50%);max-width:820px;width:max-content;text-align:center;padding:11px 21px 13px;border:1px solid #c39b66;border-radius:15px;background:#422c1cef;box-shadow:0 3px 13px #26180b66;pointer-events:auto}\n.adventure-stage .resume-text{font-size:23px;line-height:1.15;margin-bottom:8px}\n.adventure-stage .text-button{font:600 22px/1.12 'Castle Garamond',Georgia,serif;min-height:38px;padding:6px 18px;border-radius:13px;border:1px solid #cca071;background:linear-gradient(#895932,#654024);color:#fff0d0;cursor:pointer;box-shadow:0 1px 3px #462b1a40}\n.adventure-stage .text-button:hover,.adventure-stage .text-button:focus-visible{filter:brightness(1.09);outline:1px solid #ebc88d}\n.adventure-stage .actions{display:flex;justify-content:center;gap:12px}\n.adventure-stage .ad-study-heading{top:15px}\n.adventure-stage .ad-study-heading .ad-heading{font-size:44px}\n.adventure-stage .ad-study-heading .ad-heading::before,.adventure-stage .ad-study-heading .ad-heading::after{content:\"❧\";display:inline-block;font-size:31px;color:#eed098;font-weight:400;vertical-align:5px;margin:0 14px}\n.adventure-stage .ad-study-heading .ad-heading::after{transform:scaleX(-1)}\n.adventure-stage .ad-timer{position:absolute;left:0;right:0;top:26.6%;height:45.5%;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;isolation:isolate;text-align:center}\n.adventure-stage .ad-timer::before{content:\"\";position:absolute;z-index:-1;left:12%;right:12%;top:-18%;bottom:-7%;background:radial-gradient(ellipse at center,#2d241a87 0%,#332a2077 30%,#3c30224d 52%,transparent 74%);pointer-events:none}\n.adventure-stage .clock-time{font-family:'Castle Garamond',Georgia,serif;font-variant-numeric:lining-nums tabular-nums;font-weight:500;font-size:221px;line-height:1;letter-spacing:-.025em;color:#ffe5ac;text-shadow:0 2px 5px #48351e88,0 1px 15px #432f1d4d}\n.adventure-stage .clock-divider{display:flex;align-items:center;gap:12px;height:31px;margin-top:1px;color:#fada9e;font:24px/1 Georgia,serif}\n.adventure-stage .clock-divider::before,.adventure-stage .clock-divider::after{content:\"\";height:1px;width:110px;background:linear-gradient(90deg,transparent,#efcc88)}\n.adventure-stage .clock-divider::after{transform:rotate(180deg)}\n.adventure-stage .clock-label{font-weight:600;font-size:31px;line-height:1.2;margin-top:1px;color:#ffebba;text-shadow:0 2px 5px #3a301c,0 0 8px #3a301c7a}\n.adventure-stage .legacy-resume{margin-top:10px}\n.adventure-stage .castle-modal-shade{position:absolute;inset:0;display:grid;place-items:center;z-index:5;pointer-events:auto;background:#2d201ab5}\n.adventure-stage .castle-modal{max-width:630px;padding:26px 37px;text-align:center;color:#4e3221;background:linear-gradient(130deg,#f8e3bb,#f2d6aa 58%,#f8e6c3);border:2px solid #ba925e;border-radius:19px;box-shadow:0 10px 32px #26170d66}\n.adventure-stage .castle-modal h2{margin:0 0 5px;font-weight:600;font-size:39px;line-height:1.07}\n.adventure-stage .castle-modal p{font-size:25px;line-height:1.16;margin:9px 0 18px}\n.adventure-stage .reward-chip{display:inline-flex;align-items:center;gap:.13em;font-weight:600;white-space:nowrap}\n.adventure-stage .castle-door[data-state=chosen] .door-leaf{filter:brightness(1.09)}\n@media(prefers-reduced-motion:reduce){.adventure-stage .door-leaf,[data-coh-action]::before{transition:none!important}}\n#castle-adventure-ui .book-art .coh-mini{width:80px;height:80px}\n\n.adventure-stage .ad-nav::after,.adventure-stage .ad-settings::after{content:'';position:absolute;top:0;width:var(--ad-touch-size,62px);height:var(--ad-touch-size,62px);border-radius:50%}\n.adventure-stage .ad-nav::after{left:0}.adventure-stage .ad-settings::after{right:0}\n";
+  for(const [key,name] of Object.entries({"paper-strip": "Parchment_Strip.webp", "paper-seal": "Parchment_Seal.webp", "ink-hourglass": "Ink_hourglass_v2.png", "ink-doors": "Ink_doors_v2.png", "ink-deck": "Ink_deck.png", "ink-right": "Ink_right.png", "ink-star": "Ink_star.png", "ink-moon": "Ink_moon.png"}))document.documentElement.style.setProperty('--'+key,cssUrl(name));
+  style.textContent+='\n'+":root{--coh-ink:#51311f;--coh-russet:#754725;--coh-thread:#8e708d;--coh-shade:drop-shadow(0 2px 2px #35201665)}\n/* Artwork is the shared surface. The original button element owns focus, click and touch. */\n[data-coh-action][data-coh-action]{border-radius:10px!important}\n[data-coh-action][data-coh-action]::before{filter:var(--coh-shade);transition:filter .16s ease,scale .1s ease;image-rendering:auto}\n[data-coh-action][data-coh-action]:is(:hover,:focus-visible):not(:disabled)::before{filter:brightness(1.045) drop-shadow(0 0 4px #edbe75aa)}\n[data-coh-action][data-coh-action]:active:not(:disabled)::before{scale:.965;translate:none}\n:is(#castle-adventure-ui,#castle-moon-tower,#castle-dev-console,#cozy-settings-root) :is(.text-button,.rest-start,.rest-finished-ok,.rest-presets button,.book-purchase,.book-chapter,.guest-entry,.moon-primary,.moon-secondary,.moon-smalllink,.cozy-language,.music-toggle,.progress-reset,.progress-dialog button,.preview-alert,.leave-rest button,.actions button:not([data-coh-action]),.unlock,.moon-days button){\n background:var(--paper-strip) center/100% 100% no-repeat!important;color:var(--coh-ink)!important;\n border:0!important;border-radius:5px!important;box-shadow:none!important;text-shadow:none!important;\n filter:var(--coh-shade);text-decoration:none!important;cursor:pointer;touch-action:manipulation;transition:filter .16s ease,scale .1s ease;\n}\n:is(#castle-adventure-ui,#castle-moon-tower,#castle-dev-console,#cozy-settings-root) :is(.text-button,.rest-start,.rest-finished-ok,.book-purchase,.moon-primary,.moon-secondary,.moon-smalllink,.preview-alert,.progress-reset,.progress-dialog button,.leave-rest button,.actions button:not([data-coh-action]),.unlock){padding:8px 19px 12px!important;font-family:'Castle Garamond',Georgia,serif}\n:is(#castle-adventure-ui,#castle-moon-tower,#castle-dev-console,#cozy-settings-root) :is(.text-button,.rest-start,.rest-finished-ok,.rest-presets button,.book-purchase,.book-chapter,.guest-entry,.moon-primary,.moon-secondary,.moon-smalllink,.cozy-language,.music-toggle,.progress-reset,.progress-dialog button,.preview-alert,.leave-rest button,.actions button,.unlock,.moon-days button,.memory-thumb,.moon-slot):is(:hover,:focus-visible):not(:disabled){filter:brightness(1.045) drop-shadow(0 0 3px #c6934d8c)}\n:is(#castle-adventure-ui,#castle-moon-tower,#castle-dev-console,#cozy-settings-root) button:where(:not(.castle-door,.room-cat,.moon-pet,.moon-prop,.moon-flip,[data-coh-action])):active:not(:disabled){scale:.975}\n:is(#castle-adventure-ui,#castle-moon-tower,#castle-dev-console,#cozy-settings-root) button:focus-visible{outline:2px solid #865d81!important;outline-offset:1px}\n:is(#castle-adventure-ui,#castle-moon-tower,#cozy-settings-root) :is(.guest-entry[aria-pressed=true],.cozy-language[aria-pressed=true],.book-chapter.active,.rest-presets button.selected,.moon-days button.chosen){color:#50314e!important;text-decoration:underline!important;text-underline-offset:.2em;text-decoration-color:#a980a0!important}\n#castle-adventure-ui .book-chapter{padding:6px 14px 9px}#castle-adventure-ui .guest-entry{padding:6px 12px 9px}\n#castle-adventure-ui .book-purchase:disabled,#castle-moon-tower .buy:disabled{opacity:.66;cursor:default}\n#castle-adventure-ui .chapter-name,#castle-adventure-ui .guest-entry{color:var(--coh-ink)}\n#castle-adventure-ui .coh-balance.coh-balance,#castle-moon-tower .moon-wallet.moon-wallet{background:var(--paper-strip) center/100% 100% no-repeat!important;border:0!important;border-radius:0!important;box-shadow:none!important;text-shadow:none!important;color:var(--coh-ink)!important;filter:var(--coh-shade);padding:7px 18px 12px!important;gap:4px;white-space:nowrap}\n#castle-adventure-ui .coh-balance .coh-star{width:29px;height:29px;background:var(--ink-star) center/contain no-repeat!important}\n#castle-moon-tower .moon-wallet i{width:24px;height:24px;font-size:0;background:var(--ink-moon) center/contain no-repeat}\n#castle-adventure-ui .room-icon:is(.home-rest-chip,.home-sword-chip)[data-coh-action]{width:100px!important;height:77px!important;--disc-size:77px}\n#castle-adventure-ui .room-icon.home-sword-chip[data-coh-action]{left:590px}\n#castle-adventure-ui .room-icon:is(.home-rest-chip,.home-sword-chip)[data-coh-action]::before{background-image:var(--paper-seal);background-size:100% 100%}\n#castle-adventure-ui .home-rest-chip::after,#castle-adventure-ui .home-sword-chip::after{content:\"\";position:absolute;left:0;right:0;top:8%;height:50%;background:var(--ink-gl) center/contain no-repeat;pointer-events:none}\n#castle-adventure-ui .home-rest-chip{--ink-gl:var(--ink-hourglass)}#castle-adventure-ui .home-sword-chip{--ink-gl:var(--ink-doors)}\n#castle-adventure-ui .room-icon[data-coh-action] :is(.sword-caption,.rest-chip-title){bottom:17%!important;color:var(--coh-ink)!important;text-shadow:none;font:600 18px/1 'Castle Garamond',Georgia,serif}\n#castle-adventure-ui .room-icon .rest-chip-time:not(:empty){right:-13px;bottom:11px;color:var(--coh-ink)!important;background:var(--paper-strip) center/100% 100%;padding:3px 8px 6px;text-shadow:none}\n#castle-adventure-ui .memory-thumb{border:2px solid #b18b5f;border-radius:5px;background:#efdbb8}#castle-adventure-ui .memory-thumb[aria-pressed=true]{outline:2px solid #93728c}\n#castle-adventure-ui .leave-rest{max-width:min(470px,80%);background:#f5e2c1;color:var(--coh-ink);border:1px solid #9c805c;border-radius:12px;padding:22px 30px;text-align:center;font:600 24px 'Castle Garamond',serif}\n#castle-adventure-ui .leave-rest::backdrop{background:#34251b77}\n#castle-adventure-ui .leave-rest button{font-size:21px;margin:0 5px}\n#castle-moon-tower .moon-focus,#castle-moon-tower.portrait .moon-focus{left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;width:45%}\n#castle-moon-tower.portrait .moon-focus{width:68%}\n#castle-moon-tower .moon-cycle{width:100%}#castle-moon-tower .clock{text-align:center}\n#castle-moon-tower .moon-prop[data-item=MoonWindowLevel],#castle-moon-tower .moon-prop[data-item=TelescopeLevel]{clip-path:none}\n#castle-moon-tower .moon-prop[data-item=TelescopeLevel]{height:39%;width:17%;left:15%;bottom:18.3%}\n#castle-moon-tower .moon-prop[data-item=TelescopeLevel] .paint,#castle-moon-tower .moon-prop[data-item=CatCornerLevel][data-level=\"3\"] .paint{object-fit:contain}\n#castle-moon-tower .moon-prop[data-item=CatCornerLevel][data-level=\"3\"]{left:66.9%;bottom:6.9%;width:29%;height:21.4%;clip-path:none}\n#castle-moon-tower .moon-kitten.finished-nook{bottom:15.2%}\n#castle-moon-tower .moon-bar nav{gap:11px}\n#castle-moon-tower .moon-deck-icon{width:24px;height:24px;font-size:0;background:var(--ink-deck) center/contain no-repeat;border:0;box-shadow:none;transform:none}\n#castle-moon-tower .moon-cal-nav .next{transform:none}\n#castle-moon-tower .moon-slot{border-color:#987650}\n#castle-moon-tower .moon-slot:disabled{background:var(--paper-seal) center/100% 100% no-repeat;color:#7b5c40;border:0}\n#castle-moon-tower .moon-slot:disabled::before{display:none}\n#castle-moon-tower .moon-days button{background-image:var(--paper-seal)!important;padding-bottom:3px}\n#castle-moon-tower .moon-days .marked{color:#5c3d62!important;font-weight:700}\n#castle-moon-tower .moon-smalllink{line-height:1.15}\n#castle-moon-tower.portrait .moon-prop[data-item=TelescopeLevel]{height:27%;width:23%;left:8%;bottom:22%}\n#castle-moon-tower.portrait .moon-prop[data-item=CatCornerLevel][data-level=\"3\"]{width:40%;height:15%;left:55%;bottom:10.5%}\n#castle-moon-tower.portrait .moon-kitten.finished-nook{bottom:16.3%}\n.castle-notifications{border-top:1px solid #b6966d;padding-top:8px;margin-top:10px;text-align:left;color:var(--coh-ink);font:500 19px/1.15 'Castle Garamond',Georgia,serif}\n.castle-notifications label{display:block;margin:4px 0}\n.castle-notifications select{display:block;width:100%;margin:3px 0 8px;padding:5px 8px;color:var(--coh-ink);background:#faebd3;border:1px solid #af8a60;border-radius:4px;font:inherit}\n.castle-notifications input[type=range]{display:block;width:100%;accent-color:#8a6a83}\n.castle-notifications output{float:right}.castle-notifications .preview-alert{font-size:19px}\n#cozy-settings-root .cozy-panel{scrollbar-color:#a38866 #eddabc}\n#castle-dev-console .panel{background:#f3dfbf;border:1px solid #937350;color:var(--coh-ink);font-family:'Castle Garamond',Georgia,serif}\n#castle-dev-console .status{color:#795a74}\n@media(prefers-reduced-motion:reduce){button,button::before{transition-duration:.01s!important}}\n";
   style.textContent+="\n#cozy-settings-root .cozy-panel{max-height:670px;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin}\n#cozy-settings-root .castle-audio-options{font:500 20px/1.15 'Castle Garamond',Georgia,serif;text-align:left;margin:8px 0;border-top:1px solid #b59a71;padding-top:8px}\n#cozy-settings-root .castle-audio-options>label{display:block;margin:6px 0}#cozy-settings-root .castle-audio-options output{float:right}\n#cozy-settings-root .castle-audio-options input[type=range],#cozy-settings-root .castle-audio-options select{display:block;width:100%;accent-color:#846679}\n#cozy-settings-root .castle-audio-options select{font:inherit;background:#fff2d7;color:#543921;border:1px solid #aa885b;border-radius:4px;padding:4px}\n.castle-desktop-alerts label,#cozy-settings-root .switch-line,#castle-moon-tower .tower-switch{display:flex;align-items:center;gap:9px;cursor:pointer}\n.castle-desktop-alerts input[type=checkbox],#cozy-settings-root .switch-line input,#castle-moon-tower .tower-switch input{width:18px;height:18px;accent-color:#805e72;flex:0 0 auto}\n.castle-desktop-alerts small:empty{display:none}\n#cozy-settings-root .castle-desktop-alerts{border-top:1px solid #b59a71;margin:12px 0;padding-top:8px}\n#cozy-settings-root .castle-desktop-alerts:before{content:'\u0423\u0432\u0435\u0434\u043e\u043c\u043b\u0435\u043d\u0438\u044f \u0440\u0430\u0431\u043e\u0447\u0435\u0433\u043e \u0441\u0442\u043e\u043b\u0430';font-weight:600}\n#cozy-settings-root .castle-desktop-alerts[data-language=en]:before{content:'Desktop notifications'}\n#cozy-settings-root .castle-desktop-alerts label{margin:5px 0}\n.castle-find-glow{position:absolute;inset:1% 4% 6%;border-radius:30%;box-shadow:0 0 8px 4px #f0bd6390,inset 0 0 5px #fbe3a561;pointer-events:none;display:none}\n.castle-find-glow:after{content:'\u2726';position:absolute;top:-15%;right:-5%;color:#ffe1a2;text-shadow:0 0 5px #a9753a;font:20px/1 Georgia,serif}\n.castle-new-find .castle-find-glow{display:block;animation:castleFindLight 2.65s ease-in-out infinite}\n@keyframes castleFindLight{0%,100%{opacity:.54}50%{opacity:1}}\n@media(prefers-reduced-motion:reduce){.castle-new-find .castle-find-glow{animation:none;opacity:.82}}\n";
+  // Room-only icon layout. The parchment and the original buttons are preserved.
+  const roomIcon = name => cssUrl('RoomIcon_' + name + '_20261121.png');
+  const parchment = cssUrl('Parchment_Seal.webp');
+
+  // Size is [width, height] of the drawing, as a percentage of the button.
+  // Each icon can be adjusted independently without changing its parchment.
+  const roomIconSizes = {
+    home:  [58, 58], // Castle
+    gear:  [56, 56], // Settings
+    album: [63, 55], // Gallery
+    book:  [67, 59]  // Book
+  };
+  const roomIconNames = {home:'castle', gear:'gear', album:'album', book:'book'};
+  for (const [action, name] of Object.entries(roomIconNames)) {
+    const [w, h] = roomIconSizes[action];
+    style.textContent += '\n#castle-adventure-ui .room-icon[data-coh-action="' + action + '"]::before{' +
+      'background-image:' + roomIcon(name) + ',' + parchment + '!important;' +
+      'background-repeat:no-repeat,no-repeat!important;' +
+      'background-position:50% 46%,50% 50%!important;' +
+      'background-size:' + w + '% ' + h + '%,100% 100%!important;' +
+      '}';
+  }
+
+  // Original rest and doors icon layout, unchanged from the supplied source.
+  style.textContent+='\n#castle-adventure-ui .home-rest-chip.room-icon::after{background-image:'+roomIcon('hourglass')+'!important;}';
+  style.textContent+='\n#castle-adventure-ui .home-sword-chip.room-icon::after{background-image:'+roomIcon('doors')+'!important;}';
+
+  // Star in the currency counter.
+  style.textContent += '\n#castle-adventure-ui .coh-balance .coh-star{' +
+    'background-image:' + roomIcon('star') + '!important;' +
+    'background-position:center!important;background-size:contain!important;}';
+
   document.head.append(style);
   const token=key=>'<img class="coh-mini" alt="" aria-hidden="true" src="'+url('Control_'+key+'.png').replaceAll('&','&amp;').replaceAll('"','&quot;')+'">';
   const star='<span class="coh-star" aria-hidden="true"></span>';
@@ -295,8 +406,10 @@ if(!window.CastleRoomNote){
  };
 }
 if (!window.CastleClockSignals) {
-  const motionKey='castleOfHours.residentMotion.v1';
-  const wakeFrameMs=105, wakeFrames=21;
+  const motionKey='castleOfHours.qa.residentMotion.v1';
+  const transitionSpeed=2;
+  const wakeFrameMs=105/transitionSpeed, wakeFrames=21;
+  const settleFrameMs=115/transitionSpeed, reverseFrameMs=75/transitionSpeed;
   const wakeDuration=wakeFrameMs*wakeFrames;
   function stops(data){
     if(Array.isArray(data?.companionStops))return data.companionStops.filter(row=>row&&typeof row.id==='string'&&Number.isFinite(row.at));
@@ -318,8 +431,8 @@ if (!window.CastleClockSignals) {
           const m=JSON.parse(localStorage.getItem(motionKey)||'null'),at=Math.min(Date.now(),record.at);
           let next=m;
           if(!m||at>=m.nap){
-            const fold=m&&at<m.nap+32*115?Math.min(31,Math.floor((at-m.nap)/115)):null;
-            next={start:at,nap:Number.MAX_SAFE_INTEGER,fold,sleepFrame:0,release:0,duration:fold==null?wakeDuration:(fold+1)*75};
+            const fold=m&&at<m.nap+32*settleFrameMs?Math.min(31,Math.floor((at-m.nap)/settleFrameMs)):null;
+            next={start:at,nap:Number.MAX_SAFE_INTEGER,fold,sleepFrame:0,release:0,duration:fold==null?wakeDuration:(fold+1)*reverseFrameMs};
           }else if(at>=m.start&&m.nap!==Number.MAX_SAFE_INTEGER&&!m.forced){
             next={...m,nap:Number.MAX_SAFE_INTEGER};
           }
@@ -339,7 +452,7 @@ if (!window.CastleClockSignals) {
     if(home?.root?.isConnected&&home.resident){home.resident.beginInterval();return;}
     try{
       const m=JSON.parse(localStorage.getItem(motionKey)||'null'),now=Date.now();
-      if(m&&now>=m.start+(m.fold==null?(m.release||0)+wakeDuration:(m.fold+1)*75)&&now<m.nap){
+      if(m&&now>=m.start+(m.fold==null?(m.release||0)+wakeDuration:(m.fold+1)*reverseFrameMs)&&now<m.nap){
         localStorage.setItem(motionKey,JSON.stringify({...m,nap:now,forced:true}));
       }
     }catch(_){}
@@ -358,29 +471,30 @@ if (!window.CastleClockSignals) {
     const rules=window.CastleMoonRules;
     if(!rules||window.__castleMoonTower?.root?.isConnected||checking)return;
     const read=()=>{try{return JSON.parse(localStorage.getItem(rules.STATE_KEY)||'{}')||{};}catch(_){return {};}};
-    const now=()=>Date.now();
+    const now=()=>window.__castleDevTimeNow?.()??Date.now();
     const due=s=>['SHORT_BREAK','LONG_BREAK'].includes(s.phase)&&s.pausedRemainingMs==null&&s.endAt&&s.endAt<=now();
     if(!due(read()))return;
     checking=true;
     const commit=()=>{
       const original=read();if(!due(original))return;
       const data=rules.fromSave(original,now());
-      const events=rules.reconcile(data,now(),Date.now(),'',1);
+      const events=rules.reconcile(data,now(),Date.now(),'',window.__castleDeveloper?.getSpeed?.()||1);
       if(!events.length)return;
       localStorage.setItem(rules.STATE_KEY,JSON.stringify(data));publish(rules.STATE_KEY,original,data);
       for(const e of events)window.CastleTimerAlerts.once(e.alertId);
     };
-    (navigator.locks?.request?navigator.locks.request('castleOfHours.moon.write',commit):Promise.resolve().then(commit)).finally(()=>{checking=false;});
+    (navigator.locks?.request?navigator.locks.request('castleOfHours.qa.moon.write',commit):Promise.resolve().then(commit)).finally(()=>{checking=false;});
   }
   function frame(){
     const t=performance.now();if(t-last<160)return;last=t;checkAway();
   }
   document.addEventListener('visibilitychange',()=>{if(!document.hidden)checkAway();});
-  window.CastleClockSignals={mark,stops,publish,send,started,frame,wakeDuration,wakeFrames,wakeFrameMs};
+  window.CastleClockSignals={mark,stops,publish,send,started,frame,wakeDuration,wakeFrames,wakeFrameMs,settleFrameMs,reverseFrameMs,transitionSpeed};
 }
 window.CastleClockSignals.frame();
+
 };
-gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Code.userFunc0xb3e288 = function GDJSInlineCode(runtimeScene) {
+gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Code.userFunc0xbee898 = function GDJSInlineCode(runtimeScene) {
 // One notification library for all GDevelop layouts. Its preferences are independent of both wallets.
 if (!window.CastleTimerAlerts) {
   const library=[
@@ -393,8 +507,20 @@ if (!window.CastleTimerAlerts) {
     ['silent','Без звука','Silent',null]
   ];
   const key='castleOfHours.notifications.v1',seenKey=key+'.played';
-  const decode=(id,fallback)=>{try{return JSON.parse(localStorage.getItem(id))??fallback;}catch{return fallback;}};
-  const initial=decode('castleOfHours.moonTower.v1',{})?.prefs||{};
+  const decode=(id,fallback)=>{
+    let raw;
+    try{raw=localStorage.getItem(id);}catch(_){return fallback;}
+    if(raw===null)return fallback;
+    try{return JSON.parse(raw)??fallback;}catch(_){}
+    // Recover the user's explicit 'silent' choice if the primary preference was damaged.
+    try{
+      const backup=JSON.parse(localStorage.getItem(id+'.backup')||'null');
+      if(backup&&typeof backup==='object')return backup;
+    }catch(_){}
+    // An unreadable notification preference must never be silently turned back on.
+    return id===key?{sound:'silent',volume:0}:fallback;
+  };
+  const initial=decode('castleOfHours.qa.moonTower.v1',{})?.prefs||{};
   function preferences(){
     const p=decode(key,initial)||{};
     return {desktopStudy:p.desktopStudy===true,desktopRest:p.desktopRest===true,sound:library.some(row=>row[0]===p.sound)?p.sound:'bell',volume:Number.isFinite(p.volume)?Math.min(100,Math.max(0,p.volume)):65};
@@ -402,8 +528,9 @@ if (!window.CastleTimerAlerts) {
   const audio=new Audio();audio.preload='auto';
   let playing=false,wait=0,primed=false,generation=0,currentScene='';
   function level(p){
-    const master=localStorage.getItem('theCozyTime.volume');
-    return window.__castleMusic?.state?.enabled===false||p.sound==='silent'?0:p.volume/100*Math.min(1,Math.max(0,master===null ? 0.65 : Number(master)/100));
+    // Notification volume is independent of the soundtrack/music mute toggle.
+    // 'silent' is the user's explicit, persisted choice; never re-enable it.
+    return p.sound==='silent'?0:Math.max(0,Math.min(1,p.volume/100));
   }
   function stop(){generation++;playing=false;wait=0;audio.pause();}
   function play(preview=false){
@@ -475,7 +602,14 @@ if (!window.CastleTimerAlerts) {
     form.querySelector('[name=alert-tone]').value=p.sound;form.querySelector('[name=alert-volume]').value=p.volume;
     form.querySelector('output').textContent=p.volume+'%';
   }
-  function set(change){localStorage.setItem(key,JSON.stringify({...preferences(),...change}));sync();window.dispatchEvent(new Event('castle-alert-preferences'));}
+  function set(change){
+    try{
+      const json=JSON.stringify({...preferences(),...change});
+      localStorage.setItem(key,json);
+      try{localStorage.setItem(key+'.backup',json);}catch(_){}
+    }catch(error){console.warn('Castle of Hours: could not persist notification preferences',error);}
+    sync();window.dispatchEvent(new Event('castle-alert-preferences'));
+  }
   function bind(container,en){
     let field=container.querySelector(':scope > .castle-notifications');
     if(!field){
@@ -529,10 +663,10 @@ if (!window.CastleTimerAlerts) {
 }
 window.CastleTimerAlerts.enter(runtimeScene.getName());
 };
-gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Code.userFunc0xb3edb8 = function GDJSInlineCode(runtimeScene) {
+gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Code.userFunc0xafdc30 = function GDJSInlineCode(runtimeScene) {
 if(typeof window!=='undefined' && !window.__castleAdventureCore){
 const core = window.__castleAdventureCore || (window.__castleAdventureCore = (() => {
-  const KEY='castleOfHours.adventure.v1';
+  const KEY='castleOfHours.qa.adventure.v1';
   const ROOMS=[
     {"scene": "Забытая оранжерея", "ru": "Забытая оранжерея", "en": "Forgotten Greenhouse"},
     {"scene": "Мастерская алхимика", "ru": "Мастерская алхимика", "en": "Alchemist’s Workshop"},
@@ -548,30 +682,70 @@ const core = window.__castleAdventureCore || (window.__castleAdventureCore = (()
   ];
   const COSTS=[20,60,120];
   const empty=()=>({coins:0,upgrades:[0,0,0,0,0],session:null,rest:null,completed:0});
+  // Keep the existing v1 save format; the backup is only a recovery copy,
+  // never another wallet. Missing saves remain missing after an explicit reset.
+  const parseSnapshot=id=>{
+    let raw;
+    try{raw=localStorage.getItem(id);}catch(_){return {kind:'unavailable'};}
+    if(raw===null)return {kind:'missing'};
+    try{
+      const data=JSON.parse(raw);
+      if(data&&typeof data==='object'&&!Array.isArray(data))return {kind:'valid',data};
+    }catch(_){}
+    return {kind:'corrupt'};
+  };
+  let blockedByCorruptSave=false;
   const read=()=>{
-    let d;try{d=JSON.parse(localStorage.getItem(KEY)||'null')}catch(_){d=null}
-    if(!d||typeof d!=='object')d=empty();
+    const primary=parseSnapshot(KEY);
+    const backup=primary.kind==='corrupt'?parseSnapshot(KEY+'.backup'):null;
+    blockedByCorruptSave=primary.kind==='corrupt'&&backup?.kind!=='valid';
+    if(blockedByCorruptSave)console.error('Castle of Hours: adventure save is damaged; original data retained.');
+    let d=primary.data||backup?.data||empty();
     d.coins=Number.isFinite(+d.coins)?Math.max(0,Math.floor(+d.coins)):0;
     d.upgrades=Array.from({length:5},(_,i)=>Math.min(3,Math.max(0,Math.floor(+(d.upgrades||[])[i]||0))));
     d.completed=Math.max(0,Math.floor(+d.completed||0));
-    if(window.__castleGuestLedger?.migrate(d)){
-      try{localStorage.setItem(KEY,JSON.stringify(d))}catch(_){}
-    }
+    if(window.__castleGuestLedger?.migrate(d))save(d);
     return d;
   };
-  const save=d=>{try{localStorage.setItem(KEY,JSON.stringify(d))}catch(_){}};
+  const save=d=>{
+    if(blockedByCorruptSave)return false; // Never overwrite unreadable user progress with empty values.
+    try{
+      const json=JSON.stringify(d);
+      localStorage.setItem(KEY,json);
+      try{localStorage.setItem(KEY+'.backup',json);}catch(_){} // Backup is best effort.
+      return true;
+    }catch(error){console.warn('Castle of Hours: could not save adventure progress',error);return false;}
+  };
+  // A new document must not convert elapsed offline time into earned study rewards.
+  // Preserve the unfinished interval as paused; resuming requires a user action.
+  const pauseInterrupted=d=>{
+    let changed=false;
+    const pause=t=>{
+      if(!t||!t.running)return false;
+      const total=Math.max(0,Number(t.minutes)||0)*60;
+      t.remaining=Math.max(0,Math.min(total,Number.isFinite(t.remaining)?t.remaining:total));
+      t.running=false;t.endAt=0;return true;
+    };
+    if(d.session?.status==='active'&&pause(d.session))changed=true;
+    if(d.rest&&!d.rest.finished&&pause(d.rest))changed=true;
+    return changed;
+  };
+  {
+    const restored=read();
+    if(pauseInterrupted(restored))save(restored);
+  }
   const lang=()=>{
     try{return localStorage.getItem('theCozyTime.language')==='en'?'en':'ru'}catch(_){return 'ru'}
   };
   const tr=(ru,en)=>lang()==='en'?en:ru;
   const fmt=seconds=>{const s=Math.max(0,Math.ceil(seconds));return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')};
-  const currentSeconds=s=>s?(s.running?Math.max(0,(s.endAt-Date.now())/1000):Math.max(0,s.remaining||0)):0;
+  const currentSeconds=s=>s?(s.running?Math.max(0,(s.endAt-window.__castleDevTimeNow())/1000):Math.max(0,s.remaining||0)):0;
   const startSession=room=>{
     const d=read();
     if(d.session && d.session.status==='active')return false;
     const minutes=15+Math.floor(Math.random()*106);
-    d.session={id:String(Date.now())+'-'+Math.floor(Math.random()*1e6),room,minutes,
-      running:true,endAt:Date.now()+minutes*60000,remaining:minutes*60,status:'active'};
+    d.session={id:String(window.__castleDevTimeNow())+'-'+Math.floor(Math.random()*1e6),room,minutes,
+      running:true,endAt:window.__castleDevTimeNow()+minutes*60000,remaining:minutes*60,status:'active'};
     save(d);window.CastleClockSignals.started();return true;
   };
   const checkSession=()=>{
@@ -579,7 +753,7 @@ const core = window.__castleAdventureCore || (window.__castleAdventureCore = (()
     if(s && s.status==='active' && s.running && currentSeconds(s)<=0){
       s.status='complete';s.running=false;s.remaining=0;s.reward=Math.floor(s.minutes/15);
       d.coins+=s.reward;d.completed+=1;
-      window.CastleClockSignals.mark(d,'adventure/'+s.id,Date.now()-Math.max(0,Date.now()-s.endAt)/1);
+      window.CastleClockSignals.mark(d,'adventure/'+s.id,Date.now()-Math.max(0,(window.__castleDevTimeNow?.()??Date.now())-s.endAt)/(window.__castleDeveloper?.getSpeed?.()||1));
       window.__castleGuestLedger.complete(d,s);save(d);notifyStop(d);
       window.CastleTimerAlerts.once('adventure/study/'+s.id);
     }
@@ -588,7 +762,7 @@ const core = window.__castleAdventureCore || (window.__castleAdventureCore = (()
   const checkRest=()=>{
     const d=read();const r=d.rest;
     if(r&&r.running&&currentSeconds(r)<=0){r.running=false;r.remaining=0;r.finished=true;
-      window.CastleClockSignals.mark(d,'adventure/'+miniKey('rest',r),Date.now()-Math.max(0,(Date.now())-r.endAt)/(1));
+      window.CastleClockSignals.mark(d,'adventure/'+miniKey('rest',r),Date.now()-Math.max(0,(window.__castleDevTimeNow?.()??Date.now())-r.endAt)/(window.__castleDeveloper?.getSpeed?.()||1));
       save(d);notifyStop(d);window.CastleTimerAlerts.once('adventure/rest/'+r.endAt)}
     return d;
   };
@@ -607,12 +781,22 @@ const core = window.__castleAdventureCore || (window.__castleAdventureCore = (()
     if(!t||t.finished||t.status==='complete'||key!==miniKey(kind,t)||paused===!t.running)return false;
     if(rest)t.miniKey=key;
     if(paused)t.remaining=currentSeconds(t);
-    else t.endAt=Date.now()+t.remaining*1000;
+    else t.endAt=window.__castleDevTimeNow()+t.remaining*1000;
     t.running=!paused;save(d);return true;
   }
   function notifyStop(data){
     window.CastleClockSignals.send(KEY,{id:data.lastCompanionStop,at:data.companionStopAt});
   }
+  // Persist the exact remainder on a real page close/reload. Switching tabs
+  // does not trigger pagehide, so background timers keep their usual behavior.
+  window.addEventListener('pagehide',()=>{
+    const d=checkSession(); // Credit a genuinely completed interval while the page was open.
+    const s=d.session,rest=d.rest;
+    let changed=false;
+    if(s?.status==='active'&&s.running){s.remaining=currentSeconds(s);s.running=false;s.endAt=0;changed=true;}
+    if(rest&&!rest.finished&&rest.running){rest.remaining=currentSeconds(rest);rest.running=false;rest.endAt=0;changed=true;}
+    if(changed)save(d);
+  });
   function stopSession(data=checkSession()){
     const session=data.session;
     if(!session)return;
@@ -674,7 +858,7 @@ const core = window.__castleAdventureCore || (window.__castleAdventureCore = (()
 })());
 }
 };
-gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Code.userFunc0x96efd0 = function GDJSInlineCode(runtimeScene) {
+gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Code.userFunc0xbbe498 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // Draw an approved room at its design aspect. The native background sprite uses the same painting.
 if(typeof window!=='undefined' && typeof document!=='undefined' && !window.__castleAdventureView){
@@ -741,7 +925,7 @@ if(typeof window!=='undefined' && typeof document!=='undefined' && !window.__cas
       if(d.session && d.session.room!==room.scene)return;
       if(!d.session&&!core.startSession(room.scene))return;
       if(d.session?.status==='active'&&!d.session.running){
-        d.session.endAt=Date.now()+Math.max(0,d.session.remaining||0)*1000;
+        d.session.endAt=window.__castleDevTimeNow()+Math.max(0,d.session.remaining||0)*1000;
         d.session.running=true;core.save(d);
       }
       core.requestScene(ui,room.scene);opening=room.scene;
@@ -811,6 +995,8 @@ if(typeof window!=='undefined' && typeof document!=='undefined' && !window.__cas
     const finishTitle=q('#ad-success-title');
     finishTitle.tabIndex=-1;
     window.CastleMini?.add(q('.ad-timer'),{
+      room:name,
+      collapse:name==='Забытая библиотека'?()=>core.requestScene(ui,'Комната котика'):null,
       read:()=>owns(core.read().session)?core.miniRead('study'):null,
       change:(key,paused)=>owns(core.read().session) && core.miniChange('study',key,paused),
       refresh:()=>ui.update()
@@ -885,7 +1071,7 @@ if(typeof window!=='undefined' && typeof document!=='undefined' && !window.__cas
   window.__castleAdventureView={run,clock};
 }
 };
-gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Code.userFunc0xb44ff8 = function GDJSInlineCode(runtimeScene) {
+gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Code.userFunc0xb95478 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // Each completed session and its guest draw share one Adventure save.
 if (typeof window !== 'undefined' && !window.__castleGuestLedger) {
@@ -980,7 +1166,7 @@ function migrate(data) {
   })();
 }
 };
-gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Code.userFunc0xb4c2a8 = function GDJSInlineCode(runtimeScene) {
+gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Code.userFunc0xb75188 = function GDJSInlineCode(runtimeScene) {
 // Run on each scene's first frame and accept one destination from the current scene instance.
 (function(){
   if(typeof window==='undefined'||typeof document==='undefined')return;
@@ -1022,7 +1208,7 @@ gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Co
   gdjs.evtTools.runtimeScene.replaceScene(runtimeScene,route.name,false);
 })();
 };
-gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Code.userFunc0xbd68f0 = function GDJSInlineCode(runtimeScene) {
+gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Code.userFunc0xb82d50 = function GDJSInlineCode(runtimeScene) {
 // Castle of Hours — approved settings window (RU/EN and master volume).
 // This event only adds the settings overlay. It does not change the scene art,
 // cat animation, study modes, or any other game mechanics.
@@ -1199,7 +1385,7 @@ gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Co
   }
 })();
 };
-gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Code.userFunc0xb8b6e0 = function GDJSInlineCode(runtimeScene) {
+gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Code.userFunc0xbfb808 = function GDJSInlineCode(runtimeScene) {
 // Single playback and storage owner for the soundtrack and room ambience.
 (function () {
   const key = 'castleOfHours.audio.v1';
@@ -1300,13 +1486,13 @@ gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Co
   ui.refreshSound();
 })();
 };
-gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Code.userFunc0xbdff88 = function GDJSInlineCode(runtimeScene) {
+gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Code.userFunc0xbbf520 = function GDJSInlineCode(runtimeScene) {
 if(typeof window!=='undefined')window.__castleAdventureView.run(runtimeScene,'corridor');
 };
-gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Code.userFunc0xbe6308 = function GDJSInlineCode(runtimeScene) {
+gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Code.userFunc0xbaf9c8 = function GDJSInlineCode(runtimeScene) {
 if(window.__castleResetScene===runtimeScene){
   window.__castleResetScene=null;
-  for(const key of ['castleOfHours.adventure.v1','castleOfHours.moonTower.v1'])localStorage.removeItem(key);
+  for(const key of ['castleOfHours.qa.adventure.v1','castleOfHours.qa.moonTower.v1']){localStorage.removeItem(key);localStorage.removeItem(key+'.backup');}
   const menu=window.__cozyMainMenu;
   if(menu?.captureNavigation){for(const event of ['pointerdown','mousedown'])document.removeEventListener(event,menu.captureNavigation,true)}
   const settings=window.__theCozyTimeSettings;
@@ -1326,7 +1512,7 @@ gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Co
 {
 
 
-gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Code.userFunc0xb40470(runtimeScene);
+gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Code.userFunc0xb01e58(runtimeScene);
 
 }
 
@@ -1334,7 +1520,7 @@ gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Co
 {
 
 
-gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Code.userFunc0xbacd88(runtimeScene);
+gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Code.userFunc0xc8ac98(runtimeScene);
 
 }
 
@@ -1342,7 +1528,7 @@ gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Co
 {
 
 
-gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Code.userFunc0xb3e288(runtimeScene);
+gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Code.userFunc0xb43790(runtimeScene);
 
 }
 
@@ -1350,7 +1536,7 @@ gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Co
 {
 
 
-gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Code.userFunc0xb3edb8(runtimeScene);
+gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Code.userFunc0xbee898(runtimeScene);
 
 }
 
@@ -1358,7 +1544,7 @@ gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Co
 {
 
 
-gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Code.userFunc0x96efd0(runtimeScene);
+gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Code.userFunc0xafdc30(runtimeScene);
 
 }
 
@@ -1366,7 +1552,7 @@ gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Co
 {
 
 
-gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Code.userFunc0xb44ff8(runtimeScene);
+gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Code.userFunc0xbbe498(runtimeScene);
 
 }
 
@@ -1374,7 +1560,7 @@ gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Co
 {
 
 
-gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Code.userFunc0xb4c2a8(runtimeScene);
+gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Code.userFunc0xb95478(runtimeScene);
 
 }
 
@@ -1382,7 +1568,7 @@ gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Co
 {
 
 
-gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Code.userFunc0xbd68f0(runtimeScene);
+gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Code.userFunc0xb75188(runtimeScene);
 
 }
 
@@ -1390,7 +1576,7 @@ gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Co
 {
 
 
-gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Code.userFunc0xb8b6e0(runtimeScene);
+gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Code.userFunc0xb82d50(runtimeScene);
 
 }
 
@@ -1398,7 +1584,7 @@ gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Co
 {
 
 
-gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Code.userFunc0xbdff88(runtimeScene);
+gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Code.userFunc0xbfb808(runtimeScene);
 
 }
 
@@ -1406,7 +1592,15 @@ gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Co
 {
 
 
-gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Code.userFunc0xbe6308(runtimeScene);
+gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Code.userFunc0xbbf520(runtimeScene);
+
+}
+
+
+{
+
+
+gdjs._1042_1086_1083_1096_1077_1073_1085_1099_1077_32_1076_1074_1077_1088_1080Code.userFunc0xbaf9c8(runtimeScene);
 
 }
 
