@@ -4,7 +4,7 @@ gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.idToCallback
 gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.GDMenuBackgroundObjects1= [];
 
 
-gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0x8c3460 = function GDJSInlineCode(runtimeScene) {
+gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0xbd6548 = function GDJSInlineCode(runtimeScene) {
 if(typeof window!=='undefined'&&!window.__castleVkResourceChecked){
   window.__castleVkResourceChecked=true;
   if(!window.__castleVkLaunch&&(window.vkBridge?.send||new URLSearchParams(location.search).has('vk_app_id')||new URLSearchParams(location.hash.slice(1)).has('vk_app_id'))){
@@ -142,9 +142,7 @@ if(!window.CastleRoomNote){
 }
 if (!window.CastleClockSignals) {
   const motionKey='castleOfHours.residentMotion.v1';
-  const transitionSpeed=2;
-  const wakeFrameMs=105/transitionSpeed, wakeFrames=21;
-  const settleFrameMs=115/transitionSpeed, reverseFrameMs=75/transitionSpeed;
+  const wakeFrameMs=105, wakeFrames=21;
   const wakeDuration=wakeFrameMs*wakeFrames;
   function stops(data){
     if(Array.isArray(data?.companionStops))return data.companionStops.filter(row=>row&&typeof row.id==='string'&&Number.isFinite(row.at));
@@ -166,8 +164,8 @@ if (!window.CastleClockSignals) {
           const m=JSON.parse(localStorage.getItem(motionKey)||'null'),at=Math.min(Date.now(),record.at);
           let next=m;
           if(!m||at>=m.nap){
-            const fold=m&&at<m.nap+32*settleFrameMs?Math.min(31,Math.floor((at-m.nap)/settleFrameMs)):null;
-            next={start:at,nap:Number.MAX_SAFE_INTEGER,fold,sleepFrame:0,release:0,duration:fold==null?wakeDuration:(fold+1)*reverseFrameMs};
+            const fold=m&&at<m.nap+32*115?Math.min(31,Math.floor((at-m.nap)/115)):null;
+            next={start:at,nap:Number.MAX_SAFE_INTEGER,fold,sleepFrame:0,release:0,duration:fold==null?wakeDuration:(fold+1)*75};
           }else if(at>=m.start&&m.nap!==Number.MAX_SAFE_INTEGER&&!m.forced){
             next={...m,nap:Number.MAX_SAFE_INTEGER};
           }
@@ -187,7 +185,7 @@ if (!window.CastleClockSignals) {
     if(home?.root?.isConnected&&home.resident){home.resident.beginInterval();return;}
     try{
       const m=JSON.parse(localStorage.getItem(motionKey)||'null'),now=Date.now();
-      if(m&&now>=m.start+(m.fold==null?(m.release||0)+wakeDuration:(m.fold+1)*reverseFrameMs)&&now<m.nap){
+      if(m&&now>=m.start+(m.fold==null?(m.release||0)+wakeDuration:(m.fold+1)*75)&&now<m.nap){
         localStorage.setItem(motionKey,JSON.stringify({...m,nap:now,forced:true}));
       }
     }catch(_){}
@@ -224,11 +222,11 @@ if (!window.CastleClockSignals) {
     const t=performance.now();if(t-last<160)return;last=t;checkAway();
   }
   document.addEventListener('visibilitychange',()=>{if(!document.hidden)checkAway();});
-  window.CastleClockSignals={mark,stops,publish,send,started,frame,wakeDuration,wakeFrames,wakeFrameMs,settleFrameMs,reverseFrameMs,transitionSpeed};
+  window.CastleClockSignals={mark,stops,publish,send,started,frame,wakeDuration,wakeFrames,wakeFrameMs};
 }
 window.CastleClockSignals.frame();
 };
-gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0xb6ff20 = function GDJSInlineCode(runtimeScene) {
+gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0xbacd88 = function GDJSInlineCode(runtimeScene) {
 // One notification library for all GDevelop layouts. Its preferences are independent of both wallets.
 if (!window.CastleTimerAlerts) {
   const library=[
@@ -377,7 +375,7 @@ if (!window.CastleTimerAlerts) {
 }
 window.CastleTimerAlerts.enter(runtimeScene.getName());
 };
-gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0x8c35f8 = function GDJSInlineCode(runtimeScene) {
+gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0xb3e288 = function GDJSInlineCode(runtimeScene) {
 // Domain rules shared by the scene, its journal, and the GDevelop preview.
 if (!window.CastleMoonRules) {
   const STATE_KEY = 'castleOfHours.moonTower.v1';
@@ -531,7 +529,7 @@ if (!window.CastleMoonRules) {
   window.CastleMoonRules={hasLiveOwner,STATE_KEY,DAY,ids,costs,duration,fromSave,localDay,start,abandon,finishRest,reconcile,upgrade,draw,remaining,timeLeft,pause,clockText};
 }
 };
-gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0x8c3718 = function GDJSInlineCode(runtimeScene) {
+gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0xb3edb8 = function GDJSInlineCode(runtimeScene) {
 if(typeof window!=='undefined' && !window.__castleAdventureCore){
 const core = window.__castleAdventureCore || (window.__castleAdventureCore = (() => {
   const KEY='castleOfHours.adventure.v1';
@@ -676,7 +674,7 @@ const core = window.__castleAdventureCore || (window.__castleAdventureCore = (()
 })());
 }
 };
-gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0x8c37f0 = function GDJSInlineCode(runtimeScene) {
+gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0xbd60c0 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // Each completed session and its guest draw share one Adventure save.
 if (typeof window !== 'undefined' && !window.__castleGuestLedger) {
@@ -771,7 +769,7 @@ function migrate(data) {
   })();
 }
 };
-gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0xacbed8 = function GDJSInlineCode(runtimeScene) {
+gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0x96efd0 = function GDJSInlineCode(runtimeScene) {
 // Run on each scene's first frame and accept one destination from the current scene instance.
 (function(){
   if(typeof window==='undefined'||typeof document==='undefined')return;
@@ -813,7 +811,7 @@ gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0xac
   gdjs.evtTools.runtimeScene.replaceScene(runtimeScene,route.name,false);
 })();
 };
-gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0xaf52a0 = function GDJSInlineCode(runtimeScene) {
+gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0xbd6868 = function GDJSInlineCode(runtimeScene) {
 // Castle of Hours — approved settings window (RU/EN and master volume).
 // This event only adds the settings overlay. It does not change the scene art,
 // cat animation, study modes, or any other game mechanics.
@@ -990,7 +988,7 @@ gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0xaf
   }
 })();
 };
-gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0x81cc80 = function GDJSInlineCode(runtimeScene) {
+gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0xbd6908 = function GDJSInlineCode(runtimeScene) {
 // Single playback and storage owner for the soundtrack and room ambience.
 (function () {
   const key = 'castleOfHours.audio.v1';
@@ -1091,7 +1089,7 @@ gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0x81
   ui.refreshSound();
 })();
 };
-gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0xb78240 = function GDJSInlineCode(runtimeScene) {
+gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0xb44ff8 = function GDJSInlineCode(runtimeScene) {
 // Castle of Hours — bilingual main menu with reliable click navigation.
 // Transparent interactive hotspots align with the illustrated menu buttons.
 (function () {
@@ -1106,7 +1104,7 @@ gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0xb7
     root.innerHTML = `
       <style>
         
-        #cozy-main-menu {--mode-left:409px;--mode-width:524px;position:fixed;width:1280px;height:720px;z-index:2147482000;pointer-events:none;
+        #cozy-main-menu {position:fixed;width:1280px;height:720px;z-index:2147482000;pointer-events:none;
           font-family:'Castle Garamond',Georgia,serif; color:#442414;isolation:isolate;}
         #cozy-main-menu * {box-sizing:border-box;}
         /* The watercolor background is the entire design: no wood plates or outlines. */
@@ -1141,7 +1139,7 @@ gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0xb7
         #cozy-main-menu .toast.show {opacity:1;}
         #cozy-main-menu .home-caption{position:absolute;left:670px;top:650px;width:125px;
           text-align:center;font-size:22px;color:#ffedc7;text-shadow:0 2px 4px #30150e;}
-      #cozy-main-menu .mode{left:var(--mode-left);width:var(--mode-width);height:126px}
+      #cozy-main-menu .mode{left:409px;width:524px;height:126px}
 #cozy-main-menu .doors{top:246px}#cozy-main-menu .pomodoro{top:395px}
 #cozy-main-menu .mode[data-lang=ru] span,#cozy-main-menu .heart-icon,#cozy-main-menu .home-caption{display:none}
 
@@ -1150,7 +1148,7 @@ gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0xb7
 #cozy-main-menu .settings-icon:is(:hover,:focus-visible){box-shadow:0 0 12px 2px #ffd5888c,inset 0 0 7px #ffcc7777}
 #cozy-main-menu button:hover,#cozy-main-menu button:focus-visible{box-shadow:inset 0 0 13px #ffdf9b99}
 #cozy-main-menu .menu-rug{position:absolute;left:41.986%;top:75.239%;width:21.89%;height:12.01%;background: center/100% 100% no-repeat;pointer-events:none}
-#cozy-main-menu .menu-tools{position:absolute;top:75.666%;left:calc(var(--mode-left) + var(--mode-width) / 2);--icon-width:79.6px;transform:translateX(-50%);display:flex;align-items:center;gap:16.8px}
+#cozy-main-menu .menu-tools{position:absolute;top:75.666%;left:0;right:0;width:max-content;margin-inline:auto;--icon-width:79.6px;display:grid;grid-template-columns:repeat(3,var(--icon-width));align-items:center;column-gap:16.8px}
 #cozy-main-menu .menu-tools::before,#cozy-main-menu .menu-tools::after{content:'';position:absolute;pointer-events:none;width:48px;height:34.5px;top:23px;background:var(--menu-sprig) center/100% 100% no-repeat}
 #cozy-main-menu .menu-tools::before{right:calc(100% - 12px)}#cozy-main-menu .menu-tools::after{left:calc(100% - 12px);transform:scaleX(-1)}
 #cozy-main-menu .menu-tools .menu-icon{display:block;position:relative;inset:auto;width:var(--icon-width);height:78px;padding:0;border:0;border-radius:50%;box-shadow:none;background:transparent center/100% 100% no-repeat;touch-action:manipulation;transition:filter .19s ease,transform .13s ease}
@@ -1363,7 +1361,7 @@ dialog.castle-quit button:focus-visible{outline:2px solid #956f45;outline-offset
   }
 })();
 };
-gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0x8f3998 = function GDJSInlineCode(runtimeScene) {
+gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0xbd6a08 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // Общая реакция котика в меню и комнате.
 if (typeof window !== "undefined" && !window.__castleBindPet) {
@@ -1565,7 +1563,7 @@ if (typeof window !== "undefined" && !window.__castleBindPet) {
 };
 }
 };
-gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0xb77d18 = function GDJSInlineCode(runtimeScene) {
+gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0xb8bf38 = function GDJSInlineCode(runtimeScene) {
 // Castle of Hours: gentle cat breath, hover purr, fireplace shimmer and small rare sparks.
 (function(){
  if(typeof window==='undefined'||typeof document==='undefined')return;
@@ -1667,7 +1665,7 @@ gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0xb7
 
 })();
 };
-gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0x8c3398 = function GDJSInlineCode(runtimeScene) {
+gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0xb4c2a8 = function GDJSInlineCode(runtimeScene) {
 if(window.__castleResetScene===runtimeScene){
   window.__castleResetScene=null;
   for(const key of ['castleOfHours.adventure.v1','castleOfHours.moonTower.v1'])localStorage.removeItem(key);
@@ -1690,7 +1688,7 @@ gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.eventsList0 
 {
 
 
-gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0x8c3460(runtimeScene);
+gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0xbd6548(runtimeScene);
 
 }
 
@@ -1698,7 +1696,7 @@ gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0x8c
 {
 
 
-gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0xb6ff20(runtimeScene);
+gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0xbacd88(runtimeScene);
 
 }
 
@@ -1706,7 +1704,7 @@ gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0xb6
 {
 
 
-gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0x8c35f8(runtimeScene);
+gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0xb3e288(runtimeScene);
 
 }
 
@@ -1714,7 +1712,7 @@ gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0x8c
 {
 
 
-gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0x8c3718(runtimeScene);
+gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0xb3edb8(runtimeScene);
 
 }
 
@@ -1722,7 +1720,7 @@ gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0x8c
 {
 
 
-gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0x8c37f0(runtimeScene);
+gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0xbd60c0(runtimeScene);
 
 }
 
@@ -1730,7 +1728,7 @@ gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0x8c
 {
 
 
-gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0xacbed8(runtimeScene);
+gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0x96efd0(runtimeScene);
 
 }
 
@@ -1738,7 +1736,7 @@ gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0xac
 {
 
 
-gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0xaf52a0(runtimeScene);
+gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0xbd6868(runtimeScene);
 
 }
 
@@ -1746,7 +1744,7 @@ gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0xaf
 {
 
 
-gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0x81cc80(runtimeScene);
+gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0xbd6908(runtimeScene);
 
 }
 
@@ -1754,7 +1752,7 @@ gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0x81
 {
 
 
-gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0xb78240(runtimeScene);
+gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0xb44ff8(runtimeScene);
 
 }
 
@@ -1762,7 +1760,7 @@ gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0xb7
 {
 
 
-gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0x8f3998(runtimeScene);
+gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0xbd6a08(runtimeScene);
 
 }
 
@@ -1770,7 +1768,7 @@ gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0x8f
 {
 
 
-gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0xb77d18(runtimeScene);
+gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0xb8bf38(runtimeScene);
 
 }
 
@@ -1778,7 +1776,7 @@ gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0xb7
 {
 
 
-gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0x8c3398(runtimeScene);
+gdjs._1043_1083_1072_1074_1085_1086_1077_32_1084_1077_1085_1102Code.userFunc0xb4c2a8(runtimeScene);
 
 }
 

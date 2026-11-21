@@ -1,12 +1,7 @@
 // This view only paints the game snapshot. It never starts or advances an interval.
 'use strict';
 (() => {
-  let view = window.castleMiniPanel;
-  const embedded = !view && window.parent!==window;
-  if (embedded) {
-    try {view=window.parent.CastleMini?.panelFor(window);} catch (_) {return;}
-  }
-  if (!view) return;
+  const view = window.castleMiniPanel;
   const q = s => document.querySelector(s);
   const clock=q('#clock'), phase=q('#phase'), toggle=q('#toggle'), track=q('.track'), fill=q('.fill');
   let current;
@@ -21,7 +16,7 @@
     phase.textContent=rest?(en?'BREAK':'ОТДЫХ'):(en?'STUDY':'УЧЁБА');
     clock.textContent=String(Math.floor(secs/60)).padStart(2,'0')+':'+String(secs%60).padStart(2,'0');
     tip(toggle,paused?(en?'Resume':'Продолжить'):(en?'Pause':'Пауза'));
-    tip(q('#restore'),embedded?(en?'Expand timer':'Развернуть таймер'):(en?'Return to the castle':'Вернуться в замок'));
+    tip(q('#restore'),en?'Return to the castle':'Вернуться в замок');
     tip(q('#hide'),en?'Hide mini-timer':'Скрыть мини-таймер');
     q('nav').setAttribute('aria-label',en?'Timer controls':'Управление таймером');
     toggle.disabled=!['running','paused'].includes(s.status);
@@ -34,10 +29,5 @@
   toggle.onclick=()=>{if(current && !toggle.disabled) view.action(current.status==='paused'?'resume':'pause',current.key);};
   q('#restore').onclick=()=>view.action('restore');
   q('#hide').onclick=()=>view.action('hide');
-  if (embedded) {
-    const main=q('main');
-    main.style.cursor='pointer';
-    main.onclick=e=>{if(!e.target.closest('button'))view.action('restore');};
-  }
   view.subscribe(render);
 })();

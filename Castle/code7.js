@@ -5,7 +5,7 @@ gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.GDBackgroundObjects1= [];
 gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.GDCat1Objects1= [];
 
 
-gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xac7638 = function GDJSInlineCode(runtimeScene) {
+gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xbd68f0 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // Each completed session and its guest draw share one Adventure save.
 if (typeof window !== 'undefined' && !window.__castleGuestLedger) {
@@ -100,7 +100,7 @@ function migrate(data) {
   })();
 }
 };
-gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0x8c34e8 = function GDJSInlineCode(runtimeScene) {
+gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xbacd88 = function GDJSInlineCode(runtimeScene) {
 if(typeof window!=='undefined' && !window.__castleAdventureCore){
 const core = window.__castleAdventureCore || (window.__castleAdventureCore = (() => {
   const KEY='castleOfHours.adventure.v1';
@@ -245,7 +245,7 @@ const core = window.__castleAdventureCore || (window.__castleAdventureCore = (()
 })());
 }
 };
-gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xb6ff20 = function GDJSInlineCode(runtimeScene) {
+gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xb3e288 = function GDJSInlineCode(runtimeScene) {
 if(typeof window!=='undefined'&&!window.__castleVkResourceChecked){
   window.__castleVkResourceChecked=true;
   if(!window.__castleVkLaunch&&(window.vkBridge?.send||new URLSearchParams(location.search).has('vk_app_id')||new URLSearchParams(location.hash.slice(1)).has('vk_app_id'))){
@@ -383,9 +383,7 @@ if(!window.CastleRoomNote){
 }
 if (!window.CastleClockSignals) {
   const motionKey='castleOfHours.residentMotion.v1';
-  const transitionSpeed=2;
-  const wakeFrameMs=105/transitionSpeed, wakeFrames=21;
-  const settleFrameMs=115/transitionSpeed, reverseFrameMs=75/transitionSpeed;
+  const wakeFrameMs=105, wakeFrames=21;
   const wakeDuration=wakeFrameMs*wakeFrames;
   function stops(data){
     if(Array.isArray(data?.companionStops))return data.companionStops.filter(row=>row&&typeof row.id==='string'&&Number.isFinite(row.at));
@@ -407,8 +405,8 @@ if (!window.CastleClockSignals) {
           const m=JSON.parse(localStorage.getItem(motionKey)||'null'),at=Math.min(Date.now(),record.at);
           let next=m;
           if(!m||at>=m.nap){
-            const fold=m&&at<m.nap+32*settleFrameMs?Math.min(31,Math.floor((at-m.nap)/settleFrameMs)):null;
-            next={start:at,nap:Number.MAX_SAFE_INTEGER,fold,sleepFrame:0,release:0,duration:fold==null?wakeDuration:(fold+1)*reverseFrameMs};
+            const fold=m&&at<m.nap+32*115?Math.min(31,Math.floor((at-m.nap)/115)):null;
+            next={start:at,nap:Number.MAX_SAFE_INTEGER,fold,sleepFrame:0,release:0,duration:fold==null?wakeDuration:(fold+1)*75};
           }else if(at>=m.start&&m.nap!==Number.MAX_SAFE_INTEGER&&!m.forced){
             next={...m,nap:Number.MAX_SAFE_INTEGER};
           }
@@ -428,7 +426,7 @@ if (!window.CastleClockSignals) {
     if(home?.root?.isConnected&&home.resident){home.resident.beginInterval();return;}
     try{
       const m=JSON.parse(localStorage.getItem(motionKey)||'null'),now=Date.now();
-      if(m&&now>=m.start+(m.fold==null?(m.release||0)+wakeDuration:(m.fold+1)*reverseFrameMs)&&now<m.nap){
+      if(m&&now>=m.start+(m.fold==null?(m.release||0)+wakeDuration:(m.fold+1)*75)&&now<m.nap){
         localStorage.setItem(motionKey,JSON.stringify({...m,nap:now,forced:true}));
       }
     }catch(_){}
@@ -465,12 +463,12 @@ if (!window.CastleClockSignals) {
     const t=performance.now();if(t-last<160)return;last=t;checkAway();
   }
   document.addEventListener('visibilitychange',()=>{if(!document.hidden)checkAway();});
-  window.CastleClockSignals={mark,stops,publish,send,started,frame,wakeDuration,wakeFrames,wakeFrameMs,settleFrameMs,reverseFrameMs,transitionSpeed};
+  window.CastleClockSignals={mark,stops,publish,send,started,frame,wakeDuration,wakeFrames,wakeFrameMs};
 }
 window.CastleClockSignals.frame();
 };
-gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0x81cc80 = function GDJSInlineCode(runtimeScene) {
-// The desktop and browser views display the same saved interval.
+gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xb3edb8 = function GDJSInlineCode(runtimeScene) {
+// Loaded once by the timer scenes. Ordinary browser exports retain their original interface.
 if (!window.CastleMini) {
   let ipc, adapter, launch, clock, opening=false, away=false, shown=false, lastMessage='';
   const skin=window.__castleVisuals;
@@ -519,98 +517,6 @@ if (!window.CastleMini) {
       e.textContent=localStorage.getItem('theCozyTime.language')==='en'?'Could not open the mini-timer':'Не удалось открыть мини-таймер';
       launch.after(e);setTimeout(()=>e.remove(),4200);
     });
-  }
-  // Browser presentation of the same panel and Adventure session as the desktop mini-window.
-  let web = null;
-  function closeWeb() {
-    if (!web) return;
-    clearInterval(web.repaint);
-    web.frame.remove();
-    web = null;
-    adapter = null;
-    launch = null;
-  }
-  function explorer() {
-    return [window.__castleCatHome, window.__castleCorridor].find(ui =>
-      ui && window.__castleAdventureCore.canNavigate(ui));
-  }
-  function positionPanel(frame, ui) {
-    const root = ui.root;
-    const back = root.querySelector('.castle-back').getBoundingClientRect();
-    const width = frame.offsetWidth, height = frame.offsetHeight;
-    const right = Math.max(6, innerWidth - width - 6), bottom = Math.max(6, innerHeight - height - 6);
-    const below = Math.min(bottom, back.bottom + 6);
-    const spots = [[6, 6], [6, below], [right, below], [6, bottom], [right, bottom], [right, 6]];
-    const controls = Array.from(root.querySelectorAll('button:not([hidden]),.castle-resume,.ad-header'))
-      .map(el => el.getBoundingClientRect()).filter(r => r.width && r.height);
-    const overlap = ([x,y]) => controls.reduce((area,r) => area +
-      Math.max(0, Math.min(x+width,r.right)-Math.max(x,r.left)) *
-      Math.max(0, Math.min(y+height,r.bottom)-Math.max(y,r.top)), 0);
-    const [x,y] = spots.reduce((best,spot) => overlap(spot)<overlap(best)?spot:best);
-    frame.style.left=x+'px'; frame.style.top=y+'px';
-  }
-  function updateWeb() {
-    const w=web;
-    if (!w) return;
-    const value=snapshot();
-    if (!value || value.key!==w.key) {closeWeb();return;}
-    if (!w.render) return;
-    const study=window.__castleStudy;
-    if (study?.root.isConnected && study.scene!==w.origin && study.scene.getName()===w.room) {
-      closeWeb();return;
-    }
-    const ui=explorer();
-    const modal=document.querySelector('dialog[open],.cozy-open,.castle-modal-shade:not([hidden]),.home-rest-panel:not([hidden])');
-    w.frame.hidden=w.dismissed || !ui || !!modal;
-    if (!w.frame.hidden) {positionPanel(w.frame,ui);w.render(value);}
-    if (w.dismissed && value.status==='done') closeWeb();
-  }
-  function openWeb(source, value) {
-    if (web || !['paused','running'].includes(value.status)) return;
-    const frame=document.createElement('iframe');
-    frame.className='coh-web-mini';frame.title=value.en?'Study mini-timer':'Мини-таймер учёбы';
-    frame.hidden=true;
-    const w={frame,key:value.key,room:source.room,origin:window.__castleStudy.scene,dismissed:false};
-    web=w;
-    frame.addEventListener('load',()=>{
-      if(web!==w || w.render)return;
-      const button=launch;
-      closeWeb();
-      if(button?.isConnected)button.title=value.en?'Could not load mini-timer':'Не удалось загрузить мини-таймер';
-    },{once:true});
-    frame.src=skin.url('MiniTimerPanel.html');
-    document.body.append(frame);
-  }
-  function panelFor(child) {
-    const w=web;
-    if (!w || w.frame.contentWindow!==child) return null;
-    return {
-      subscribe(render) {
-        if (web!==w || w.render) return;
-        const value=snapshot();
-        if (!value || value.key!==w.key || value.status==='done' || !adapter.collapse()) {closeWeb();return;}
-        w.render=render;
-        render(value);
-        // Repaint from the saved deadline. This interval owns no timer or rewards.
-        w.repaint=setInterval(updateWeb,250);
-        updateWeb();
-      },
-      action(type,key) {
-        if (web!==w) return;
-        const value=snapshot(),ui=explorer();
-        if (!value || value.key!==w.key) {closeWeb();return;}
-        if (!ui || w.frame.hidden) return;
-        if (type==='restore') {
-          if (window.__castleAdventureCore.requestScene(ui,w.room)) closeWeb();
-        } else if (type==='hide') {
-          w.dismissed=true;updateWeb();
-        } else if (key===w.key && (type==='pause' || type==='resume')) {
-          adapter.change(key,type==='pause');updateWeb();
-        }
-      }
-    };
-  }
-  {
     const style=document.createElement('style');
     style.textContent=`
     html[data-castle-mini-away] .moon-stage *,html[data-castle-mini-away] .adventure-stage *,html[data-castle-mini-away] #castle-adventure-ui *{animation-play-state:paused!important}
@@ -620,35 +526,29 @@ if (!window.CastleMini) {
     .moon-focus .coh-mini-launch{position:absolute;left:calc(50% + 110px);bottom:0}
     .ad-timer .coh-mini-launch{position:relative;margin-top:6px;flex:0 0 35px}
     .home-rest-panel .coh-mini-launch{position:absolute;top:12px;right:12px}
-    .coh-web-mini{position:fixed;z-index:2147482250;border:0;background:transparent;width:min(238px,calc(100vw - 12px));height:74px;color-scheme:light}
-    .coh-web-mini[hidden]{display:none}
-    .ad-timer .coh-web-launch{display:inline-flex;gap:6px;align-items:center;justify-content:center;width:auto;min-width:170px;height:40px;flex:0 0 40px;padding:4px 18px;background-image:var(--paper-strip);font:600 17px/1.1 'Castle Garamond',Georgia,serif;white-space:nowrap}
-    @media (pointer:coarse),(max-width:600px){.ad-timer .coh-web-launch{min-height:var(--ad-touch-size);min-width:max(170px,calc(var(--ad-touch-size) * 3.1));font-size:max(17px,calc(var(--ad-touch-size) * .32))}}
     .coh-mini-error{display:block;background:#4a3540;color:#fff0cf;padding:4px 7px;font:15px Georgia,serif}
     `; document.head.append(style);
   }
   function add(parent,source) {
-    if (!parent || (!ipc && !source.collapse)) return;
+    if (!ipc || !parent) return;
     const b=document.createElement('button');
     b.type='button';b.className='coh-mini-launch';
     b.style.setProperty('--mini-material',skin.cssUrl('Parchment_Seal.webp'));
     b.innerHTML='<svg viewBox="0 0 24 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"><rect x="1.8" y="2" width="20.4" height="15.8" rx="2.1"/><rect x="11.2" y="9.1" width="8" height="5.6" rx=".7" fill="currentColor" stroke="none"/></svg>';
-    if (!ipc) {b.classList.add('coh-web-launch');b.append(document.createElement('span'));}
-    function label(){b.title=localStorage.getItem('theCozyTime.language')==='en'?'Mini-timer':'Мини-таймер';if(!ipc){b.title=window.__castleAdventureCore.tr('Свернуть таймер','Minimize timer');b.lastElementChild.textContent=b.title;}b.setAttribute('aria-label',b.title);}
+    function label(){b.title=localStorage.getItem('theCozyTime.language')==='en'?'Mini-timer':'Мини-таймер';b.setAttribute('aria-label',b.title);}
     label();b.onpointerenter=label;b.onfocus=label;
     b.onclick=()=>{
       if(opening || away) return;
       launch=b;adapter=source;lastMessage='';
       const value=snapshot();if(!value)return;
-      if(!ipc){openWeb(source,value);return;}
       opening=true;send('open',value);
     };
     parent.append(b);
   }
-  window.CastleMini={add,panelFor,get away(){return away||opening;}};
+  window.CastleMini={add,get away(){return away||opening;}};
 }
 };
-gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0x8f3998 = function GDJSInlineCode(runtimeScene) {
+gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xbdff88 = function GDJSInlineCode(runtimeScene) {
 // One notification library for all GDevelop layouts. Its preferences are independent of both wallets.
 if (!window.CastleTimerAlerts) {
   const library=[
@@ -797,7 +697,7 @@ if (!window.CastleTimerAlerts) {
 }
 window.CastleTimerAlerts.enter(runtimeScene.getName());
 };
-gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xb2aa28 = function GDJSInlineCode(runtimeScene) {
+gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0x96efd0 = function GDJSInlineCode(runtimeScene) {
 // Run on each scene's first frame and accept one destination from the current scene instance.
 (function(){
   if(typeof window==='undefined'||typeof document==='undefined')return;
@@ -839,7 +739,7 @@ gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xb2aa28 = function GD
   gdjs.evtTools.runtimeScene.replaceScene(runtimeScene,route.name,false);
 })();
 };
-gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xaf52a0 = function GDJSInlineCode(runtimeScene) {
+gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xb314f8 = function GDJSInlineCode(runtimeScene) {
 // Castle of Hours — approved settings window (RU/EN and master volume).
 // This event only adds the settings overlay. It does not change the scene art,
 // cat animation, study modes, or any other game mechanics.
@@ -1016,7 +916,7 @@ gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xaf52a0 = function GD
   }
 })();
 };
-gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xb777f0 = function GDJSInlineCode(runtimeScene) {
+gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xb4ae28 = function GDJSInlineCode(runtimeScene) {
 // Single playback and storage owner for the soundtrack and room ambience.
 (function () {
   const key = 'castleOfHours.audio.v1';
@@ -1117,7 +1017,7 @@ gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xb777f0 = function GD
   ui.refreshSound();
 })();
 };
-gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xacbed8 = function GDJSInlineCode(runtimeScene) {
+gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xb8bf38 = function GDJSInlineCode(runtimeScene) {
 // Domain rules shared by the scene, its journal, and the GDevelop preview.
 if (!window.CastleMoonRules) {
   const STATE_KEY = 'castleOfHours.moonTower.v1';
@@ -1271,7 +1171,7 @@ if (!window.CastleMoonRules) {
   window.CastleMoonRules={hasLiveOwner,STATE_KEY,DAY,ids,costs,duration,fromSave,localDay,start,abandon,finishRest,reconcile,upgrade,draw,remaining,timeLeft,pause,clockText};
 }
 };
-gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xb78240 = function GDJSInlineCode(runtimeScene) {
+gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xb44ff8 = function GDJSInlineCode(runtimeScene) {
 if(!window.CastleMoonData){
   const cards=[
   {
@@ -1425,7 +1325,7 @@ if(!window.CastleMoonData){
 `;
 }
 };
-gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xac77f8 = function GDJSInlineCode(runtimeScene) {
+gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xb8b6e0 = function GDJSInlineCode(runtimeScene) {
 if (!window.CastleMoonPainting) {
   window.CastleMoonPainting = function(root,url) {
     const cat=root.querySelector('.moon-kitten'),sky=root.querySelector('.moon-fireworks');
@@ -1536,7 +1436,7 @@ if (!window.CastleMoonPainting) {
   };
 }
 };
-gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xac6e80 = function GDJSInlineCode(runtimeScene) {
+gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xbd4178 = function GDJSInlineCode(runtimeScene) {
 if(!window.CastleMoonScene){
 window.CastleMoonScene=function(scene){
   const R=window.CastleMoonRules, D=window.CastleMoonData, V=window.__castleVisuals;
@@ -2012,7 +1912,7 @@ window.CastleMoonScene=function(scene){
 };
 }
 };
-gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xac6cc0 = function GDJSInlineCode(runtimeScene) {
+gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xbe6308 = function GDJSInlineCode(runtimeScene) {
 if(typeof document!=='undefined' && window.__castleScreenFade?.pending?.from!==runtimeScene.getName()){
   let tower=window.__castleMoonTower;
   if(!tower||tower.scene!==runtimeScene||!tower.root.isConnected){
@@ -2023,7 +1923,7 @@ if(typeof document!=='undefined' && window.__castleScreenFade?.pending?.from!==r
   tower.tick();
 }
 };
-gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xac6de0 = function GDJSInlineCode(runtimeScene) {
+gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xbd6530 = function GDJSInlineCode(runtimeScene) {
 if(window.__castleResetScene===runtimeScene){
   window.__castleResetScene=null;
   for(const key of ['castleOfHours.adventure.v1','castleOfHours.moonTower.v1'])localStorage.removeItem(key);
@@ -2046,7 +1946,7 @@ gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.eventsList0 = function(runtime
 {
 
 
-gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xac7638(runtimeScene);
+gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xbd68f0(runtimeScene);
 
 }
 
@@ -2054,7 +1954,7 @@ gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xac7638(runtimeScene)
 {
 
 
-gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0x8c34e8(runtimeScene);
+gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xbacd88(runtimeScene);
 
 }
 
@@ -2062,7 +1962,7 @@ gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0x8c34e8(runtimeScene)
 {
 
 
-gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xb6ff20(runtimeScene);
+gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xb3e288(runtimeScene);
 
 }
 
@@ -2070,7 +1970,7 @@ gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xb6ff20(runtimeScene)
 {
 
 
-gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0x81cc80(runtimeScene);
+gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xb3edb8(runtimeScene);
 
 }
 
@@ -2078,7 +1978,7 @@ gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0x81cc80(runtimeScene)
 {
 
 
-gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0x8f3998(runtimeScene);
+gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xbdff88(runtimeScene);
 
 }
 
@@ -2086,7 +1986,7 @@ gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0x8f3998(runtimeScene)
 {
 
 
-gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xb2aa28(runtimeScene);
+gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0x96efd0(runtimeScene);
 
 }
 
@@ -2094,7 +1994,7 @@ gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xb2aa28(runtimeScene)
 {
 
 
-gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xaf52a0(runtimeScene);
+gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xb314f8(runtimeScene);
 
 }
 
@@ -2102,7 +2002,7 @@ gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xaf52a0(runtimeScene)
 {
 
 
-gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xb777f0(runtimeScene);
+gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xb4ae28(runtimeScene);
 
 }
 
@@ -2110,7 +2010,7 @@ gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xb777f0(runtimeScene)
 {
 
 
-gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xacbed8(runtimeScene);
+gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xb8bf38(runtimeScene);
 
 }
 
@@ -2118,7 +2018,7 @@ gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xacbed8(runtimeScene)
 {
 
 
-gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xb78240(runtimeScene);
+gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xb44ff8(runtimeScene);
 
 }
 
@@ -2126,7 +2026,7 @@ gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xb78240(runtimeScene)
 {
 
 
-gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xac77f8(runtimeScene);
+gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xb8b6e0(runtimeScene);
 
 }
 
@@ -2134,7 +2034,7 @@ gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xac77f8(runtimeScene)
 {
 
 
-gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xac6e80(runtimeScene);
+gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xbd4178(runtimeScene);
 
 }
 
@@ -2142,7 +2042,7 @@ gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xac6e80(runtimeScene)
 {
 
 
-gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xac6cc0(runtimeScene);
+gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xbe6308(runtimeScene);
 
 }
 
@@ -2150,7 +2050,7 @@ gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xac6cc0(runtimeScene)
 {
 
 
-gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xac6de0(runtimeScene);
+gdjs._1055_1086_1084_1086_1076_1086_1088_1086Code.userFunc0xbd6530(runtimeScene);
 
 }
 
